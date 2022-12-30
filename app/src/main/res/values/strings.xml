@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Drink Register App</string>
+    <string name="action_settings">Settings</string>
+    <string name="exit_button">EXIT</string>
+</resources>
