@@ -41,11 +41,13 @@ public class ButtonListAdapter extends RecyclerView.Adapter<ButtonListAdapter.Bu
 
         // Configures the addition of balance
         holder.button.setOnClickListener(view -> {
-            user.addBalance(0.7);
-            app.getMdbHelper().updateBalance(user);
-            String text = Math.round(user.getBalance() * 100.0) / 100.0 + " euro";
-            Snackbar popup = Snackbar.make(view, text, BaseTransientBottomBar.LENGTH_LONG);
-            popup.show();
+            if (app.isVerified()) {
+                user.addBalance(0.7);
+                app.getMdbHelper().updateBalance(user);
+            } else {
+                app.setLogin(user);
+                app.onButtonShowPopupWindowClick(view);
+            }
         });
     }
 

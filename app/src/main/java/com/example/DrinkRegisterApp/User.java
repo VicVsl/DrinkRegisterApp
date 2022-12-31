@@ -82,7 +82,7 @@ public class User {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", group='" + group + '\'' +
-                ", balance=" + balance +
+                ", balance=" + Math.round(balance * 100.0) / 100.0 +
                 ", pinCode=" + pinCode +
                 '}';
     }
