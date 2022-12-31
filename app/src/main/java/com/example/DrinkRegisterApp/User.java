@@ -10,14 +10,16 @@ public class User {
     private final String firstName;
     private final String lastName;
     private String group;
+    private String rank;
     private double balance;
     private int pinCode;
 
-    public User(int id, String firstName, String lastName, String group, int pinCode) {
+    public User(int id, String firstName, String lastName, String group, String rank, int pinCode) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.group = group;
+        this.rank = rank;
         this.balance = 0;
         this.pinCode = pinCode;
     }
@@ -46,6 +48,14 @@ public class User {
         this.group = group;
     }
 
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
+
     public double getBalance() {
         return balance;
     }
@@ -67,7 +77,7 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return balance == user.balance && pinCode == user.pinCode && firstName.equals(user.firstName) && lastName.equals(user.lastName) && group.equals(user.group);
+        return balance == user.balance && pinCode == user.pinCode && firstName.equals(user.firstName) && lastName.equals(user.lastName) && group.equals(user.group) && rank.equals(user.rank);
     }
 
     @Override
@@ -82,6 +92,7 @@ public class User {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", group='" + group + '\'' +
+                ", rank='" + rank + '\'' +
                 ", balance=" + Math.round(balance * 100.0) / 100.0 +
                 ", pinCode=" + pinCode +
                 '}';

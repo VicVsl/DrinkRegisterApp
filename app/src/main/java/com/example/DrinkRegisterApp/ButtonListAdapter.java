@@ -44,6 +44,9 @@ public class ButtonListAdapter extends RecyclerView.Adapter<ButtonListAdapter.Bu
             if (app.isVerified()) {
                 user.addBalance(0.7);
                 app.getMdbHelper().updateBalance(user);
+                String name1 = app.getLogin().getFirstName() + " " + app.getLogin().getLastName().charAt(0) + ".";
+                String name2 = user.getFirstName() + " " + user.getLastName().charAt(0) + ".";
+                app.getMdbHelper().insertLog(name1, name2, "addition", 1);
             } else {
                 app.setLogin(user);
                 app.onButtonShowPopupWindowClick(view);

@@ -13,8 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,10 +20,12 @@ public class MainActivity extends AppCompatActivity {
     private List<User> users;
     private DatabaseHelper mDbHelper;
     private PinPopUpHelper ppuHelper;
+    private OptionsPopUpHelper opuHelper;
     private User login;
     private boolean verified = false;
     private TextView loginLabel;
     private Button returnButton;
+    private Button optionsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +33,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mDbHelper = new DatabaseHelper(this);
         ppuHelper = new PinPopUpHelper(this);
+        opuHelper = new OptionsPopUpHelper(this);
 
         // Makes sure users isn't 0
         users = mDbHelper.getUsers();
         if (users.isEmpty()) {
-            users.add(new User(0, "temp", "test", "other", 0));
+            users.add(new User(0, "admin", "temp", "other", "admin", 0));
         }
 
         loginLabel = (TextView) findViewById(R.id.loginLabel);
@@ -49,16 +50,20 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 System.exit(0);
             }
-            loginLabel.setText("Scouts Gits");
-            verified = false;
             login = null;
-            returnButton.setText("EXIT");
-            returnButton.setTextSize(25);
+            verified = false;
+            updateScreen();
         });
 
-        // Configure log button
-        Button logButton = (Button) findViewById(R.id.logButton);
-        logButton.setOnClickListener(this::showLog);
+        // Configure options button
+        optionsButton = (Button) findViewById(R.id.optionsButton);
+        optionsButton.setOnClickListener(view -> {
+            if (!verified) {
+                showLog(view);
+                return;
+            }
+            opuHelper.showOptions(view);
+        });
 
 
         // Configures the list of buttons
@@ -67,13 +72,6 @@ public class MainActivity extends AppCompatActivity {
         buttonList.setLayoutManager(layoutManager);
         ButtonListAdapter adapter = new ButtonListAdapter(this);
         buttonList.setAdapter(adapter);
-
-        // Setup the database if it's empty
-        if (mDbHelper.getUsers().isEmpty()) {
-            startDatabase();
-            finish();
-            startActivity(getIntent());
-        }
     }
 
     public void onButtonShowPopupWindowClick(View view) {
@@ -103,15 +101,12 @@ public class MainActivity extends AppCompatActivity {
         View popupView = inflater.inflate(R.layout.log, null);
 
         // create the popup window
-        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = true; // lets taps outside the popup also dismiss it
-        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 1100, 1300, focusable);
 
-        TextView logText = (TextView) popupView.findViewById(R.id.testText);
-        String text = mDbHelper.getUsers().toString();
+        TextView logText = (TextView) popupView.findViewById(R.id.logText);
+        String text = mDbHelper.getLog().toString();
         logText.setText(text);
-        logText.setTextColor(getResources().getColor(R.color.yellow));
 
         // show the popup window
         // which view you pass in doesn't matter, it is only used for the window tolken
@@ -121,9 +116,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean verifyPinCode(String pincode) {
         if (Integer.parseInt(pincode) == login.getPinCode()) {
             verified = true;
-            loginLabel.setText(login.getFirstName() + " " + login.getLastName());
-            returnButton.setText("LOG OUT");
-            returnButton.setTextSize(18);
+            updateScreen();
             return true;
         }
         return false;
@@ -135,11 +128,27 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    public void updateScreen() {
+        if (verified) {
+            loginLabel.setText(login.getFirstName() + " " + login.getLastName());
+            returnButton.setText("LOG OUT");
+            returnButton.setTextSize(18);
+            optionsButton.setText("OPTIONS");
+            optionsButton.setTextSize(18);
+        } else {
+            loginLabel.setText("Scouts Gits");
+            returnButton.setText("EXIT");
+            returnButton.setTextSize(25);
+            optionsButton.setText("LOG");
+            optionsButton.setTextSize(25);
+        }
+    }
+
     public void startDatabase() {
         // Creates users
-        User vic = new User(0,"Vic", "Vansteelant", "Verkenners", 1111);
-        User jannes = new User(0, "Jannes", "Dekeyzer", "Kapoenen", 2222);
-        User bavo = new User(0, "Bavo", "Dewaele", "Jins", 3333);
+        User vic = new User(0,"Vic", "Vansteelant", "Verkenners", "admin", 1111);
+        User jannes = new User(0, "Jannes", "Dekeyzer", "Kapoenen", "mod", 2222);
+        User bavo = new User(0, "Bavo", "Dewaele", "Jins", "regular", 3333);
 
         // Inserts the users in the database
         mDbHelper.insertUser(vic);
@@ -147,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < 30; i++ ) {
             mDbHelper.insertUser(bavo);
         }
+        finish();
+        startActivity(getIntent());
     }
 
     public List<User> getUsers() {

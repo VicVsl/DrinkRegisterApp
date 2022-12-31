@@ -22,7 +22,7 @@
 
     <!-- Scrollable list of buttons -->
     <Button
-        android:id="@+id/logButton"
+        android:id="@+id/optionsButton"
         android:layout_width="120dp"
         android:layout_height="60dp"
         android:layout_marginTop="20dp"

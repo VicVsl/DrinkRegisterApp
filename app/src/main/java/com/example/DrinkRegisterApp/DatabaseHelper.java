@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -19,8 +20,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE users (id INTEGER PRIMARY KEY, first_name TEXT, last_name TEXT, group_ TEXT, balance REAL, pin_code INTEGER)";
-        db.execSQL(sql);
+        String sqlUsers = "CREATE TABLE users (id INTEGER PRIMARY KEY, first_name TEXT, last_name TEXT, group_ TEXT, rank_ TEXT, balance REAL, pin_code INTEGER)";
+        db.execSQL(sqlUsers);
+        String sqlLog = "CREATE TABLE log (id INTEGER PRIMARY KEY, user_1 TEXT, user_2 TEXT, action_ TEXT, amount_ INTEGER)";
+        db.execSQL(sqlLog);
     }
 
     @Override
@@ -30,8 +33,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void emptyDb() {
         SQLiteDatabase db = getWritableDatabase();
-        String sql = "DELETE FROM users";
-        db.execSQL(sql);
+        String sqlUsers = "DELETE FROM users";
+        db.execSQL(sqlUsers);
+        String sqlLog = "DELETE FROM log";
+        db.execSQL(sqlLog);
     }
 
     public void insertUser(User user) {
@@ -40,9 +45,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("first_name", user.getFirstName());
         values.put("last_name", user.getLastName());
         values.put("group_", user.getGroup());
+        values.put("rank_", user.getRank());
         values.put("balance", user.getBalance());
         values.put("pin_code", user.getPinCode());
         db.insert("users", null, values);
+    }
+
+    public void insertLog(String user1, String user2, String action, int amount) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("user_1", user1);
+        values.put("user_2", user2);
+        values.put("action_", action);
+        values.put("amount_", amount);
+        db.insert("log", null, values);
+    }
+
+    public List<String> getLog() {
+        List<String> log = new ArrayList<>();
+
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "SELECT * FROM log WHERE amount_ > 0";
+        Cursor cursor = db.rawQuery(sql, null);
+
+        while (cursor.moveToNext()) {
+            String logLine = '\n' + cursor.getString(1) + " added to " + cursor.getString(2) + " : " + cursor.getInt(4);
+            log.add(logLine);
+        }
+        cursor.close();
+        Collections.reverse(log);
+        return log;
     }
 
     public List<User> getUsers() {
@@ -57,10 +89,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String firstName = cursor.getString(1);
             String lastName = cursor.getString(2);
             String group = cursor.getString(3);
-            double balance = cursor.getDouble(4);
-            int pinCode = cursor.getInt(5);
+            String rank = cursor.getString(4);
+            double balance = cursor.getDouble(5);
+            int pinCode = cursor.getInt(6);
 
-            User user = new User(id, firstName, lastName, group, pinCode);
+            User user = new User(id, firstName, lastName, group, rank, pinCode);
             user.setBalance(balance);
             users.add(user);
         }
@@ -72,6 +105,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("balance", user.getBalance());
+        String[] selectionArgs = {user.getId() + ""};
+
+        db.update("users", values, "id LIKE ?", selectionArgs);
+    }
+
+    public void updateRank(User user) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("rank_", user.getRank());
         String[] selectionArgs = {user.getId() + ""};
 
         db.update("users", values, "id LIKE ?", selectionArgs);
