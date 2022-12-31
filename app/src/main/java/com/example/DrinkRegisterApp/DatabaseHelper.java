@@ -62,12 +62,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public List<String> getLog() {
-        List<String> log = new ArrayList<>();
-
         SQLiteDatabase db = getReadableDatabase();
         String sql = "SELECT * FROM log WHERE amount_ > 0";
         Cursor cursor = db.rawQuery(sql, null);
 
+        List<String> log = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            String logLine = '\n' + cursor.getString(1) + " added to " + cursor.getString(2) + " : " + cursor.getInt(4);
+            log.add(logLine);
+        }
+        cursor.close();
+        Collections.reverse(log);
+        return log;
+    }
+
+    public List<String> findLogByName(String name) {
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "SELECT * FROM log WHERE user_2='" + name + "' AND  action_='addition'";
+        Cursor cursor = db.rawQuery(sql, null);
+
+        List<String> log = new ArrayList<>();
         while (cursor.moveToNext()) {
             String logLine = '\n' + cursor.getString(1) + " added to " + cursor.getString(2) + " : " + cursor.getInt(4);
             log.add(logLine);
@@ -99,6 +113,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return users;
+    }
+
+    public User findUserByName(String fName, String lName) {
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "SELECT * FROM users WHERE first_name='" + fName + "' AND  last_name='" + lName + "'";
+        Cursor cursor = db.rawQuery(sql, null);
+
+        cursor.moveToNext();
+        int id = cursor.getInt(0);
+        String firstName = cursor.getString(1);
+        String lastName = cursor.getString(2);
+        String group = cursor.getString(3);
+        String rank = cursor.getString(4);
+        double balance = cursor.getDouble(5);
+        int pinCode = cursor.getInt(6);
+        User user = new User(id, firstName, lastName, group, rank, pinCode);
+        user.setBalance(balance);
+
+        cursor.close();
+        return user;
     }
 
     public void updateBalance(User user) {

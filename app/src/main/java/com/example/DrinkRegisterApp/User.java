@@ -57,7 +57,7 @@ public class User {
     }
 
     public double getBalance() {
-        return balance;
+        return Math.round(balance * 100.0) / 100.0;
     }
 
     public void setBalance(double balance) {
@@ -77,7 +77,7 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return balance == user.balance && pinCode == user.pinCode && firstName.equals(user.firstName) && lastName.equals(user.lastName) && group.equals(user.group) && rank.equals(user.rank);
+        return pinCode == user.pinCode && firstName.equals(user.firstName) && lastName.equals(user.lastName) && group.equals(user.group) && rank.equals(user.rank);
     }
 
     @Override

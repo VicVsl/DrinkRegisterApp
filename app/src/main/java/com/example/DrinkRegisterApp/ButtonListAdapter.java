@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ButtonListAdapter extends RecyclerView.Adapter<ButtonListAdapter.ButtonViewHolder> {
 
@@ -42,13 +45,20 @@ public class ButtonListAdapter extends RecyclerView.Adapter<ButtonListAdapter.Bu
         // Configures the addition of balance
         holder.button.setOnClickListener(view -> {
             if (app.isVerified()) {
-                user.addBalance(0.7);
-                app.getMdbHelper().updateBalance(user);
-                String name1 = app.getLogin().getFirstName() + " " + app.getLogin().getLastName().charAt(0) + ".";
-                String name2 = user.getFirstName() + " " + user.getLastName().charAt(0) + ".";
-                app.getMdbHelper().insertLog(name1, name2, "addition", 1);
+                Change change = new Change(user.getFirstName(), user.getLastName(), 1);
+                List<Change> changes = app.getChanges();
+                if (changes.contains(change)) {
+                    int index = changes.indexOf(change);
+                    app.getChanges().get(index).setAmount(changes.get(index).getAmount() + 1);
+                } else {
+                    app.getChanges().add(change);
+                }
             } else {
-                app.setLogin(user);
+                if (!user.getFirstName().equals("admin")) {
+                    app.setLogin(app.getMdbHelper().findUserByName(user.getFirstName(), user.getLastName()));
+                } else {
+                    app.setLogin(user);
+                }
                 app.onButtonShowPopupWindowClick(view);
             }
         });

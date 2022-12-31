@@ -13,7 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView loginLabel;
     private Button returnButton;
     private Button optionsButton;
+    private List<Change> changes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         mDbHelper = new DatabaseHelper(this);
         ppuHelper = new PinPopUpHelper(this);
         opuHelper = new OptionsPopUpHelper(this);
+        changes = new ArrayList<>();
 
         // Makes sure users isn't 0
         users = mDbHelper.getUsers();
@@ -50,9 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 System.exit(0);
             }
-            login = null;
-            verified = false;
-            updateScreen();
+            showConfirmation(view);
         });
 
         // Configure options button
@@ -102,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
         // create the popup window
         boolean focusable = true; // lets taps outside the popup also dismiss it
-        final PopupWindow popupWindow = new PopupWindow(popupView, 1100, 1300, focusable);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 1200, 1300, focusable);
 
         TextView logText = (TextView) popupView.findViewById(R.id.logText);
         String text = mDbHelper.getLog().toString();
@@ -111,6 +113,68 @@ public class MainActivity extends AppCompatActivity {
         // show the popup window
         // which view you pass in doesn't matter, it is only used for the window tolken
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+    }
+
+    public void showBalance(View v) {
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.check_balance, null);
+
+        // create the popup window
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, 900, 1000, focusable);
+
+        TextView balanceTotal = (TextView) popupView.findViewById(R.id.balanceTotal);
+        balanceTotal.setText(login.getBalance() + "€");
+
+        TextView balanceHistory = (TextView) popupView.findViewById(R.id.balanceHistory);
+        String text = mDbHelper.findLogByName(login.getFirstName() + " " + login.getLastName().charAt(0) + ".").toString();
+        balanceHistory.setText(text);
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+    }
+
+    public void showConfirmation(View v) {
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.confirm_changes, null);
+
+        // create the popup window
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 1000, focusable);
+
+        TextView changesText = (TextView) popupView.findViewById(R.id.changesText);
+        changesText.setText(changes.toString());
+
+        Button confirmButton = (Button) popupView.findViewById(R.id.confirmationButton);
+        confirmButton.setOnClickListener(view -> {
+            applyChanges();
+            login = null;
+            verified = false;
+            popupWindow.dismiss();
+            updateScreen();
+        });
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+    }
+
+    public void applyChanges() {
+        for (int i = 0; i < changes.size(); i++) {
+            Change change = changes.get(i);
+            User user = mDbHelper.findUserByName(change.getFirstName(), change.getLastName());
+            user.addBalance(0.7 * change.getAmount());
+            mDbHelper.updateBalance(user);
+            String name1 = login.getFirstName() + " " + login.getLastName().charAt(0) + ".";
+            String name2 = user.getFirstName() + " " + user.getLastName().charAt(0) + ".";
+            mDbHelper.insertLog(name1, name2, "addition", change.getAmount());
+        }
+        changes.clear();
     }
 
     public boolean verifyPinCode(String pincode) {
@@ -178,5 +242,13 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean isVerified() {
         return verified;
+    }
+
+    public List<Change> getChanges() {
+        return changes;
+    }
+
+    public void setChanges(List<Change> changes) {
+        this.changes = changes;
     }
 }

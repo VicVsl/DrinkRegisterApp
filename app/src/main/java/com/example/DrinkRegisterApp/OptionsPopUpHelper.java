@@ -6,9 +6,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 public class OptionsPopUpHelper {
 
@@ -40,7 +38,13 @@ public class OptionsPopUpHelper {
 
         // create the popup window
         boolean focusable = true; // lets taps outside the popup also dismiss it
-        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 1000, focusable);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 1200, focusable);
+
+        Button checkBalanceButton = (Button) popupView.findViewById(R.id.checkBalanceButton);
+        checkBalanceButton.setOnClickListener(view -> {
+            popupWindow.dismiss();
+            app.showBalance(view);
+        });
 
         Button createUserButton = (Button) popupView.findViewById(R.id.buttonCreateUser);
         createUserButton.setOnClickListener(view -> {
@@ -54,7 +58,7 @@ public class OptionsPopUpHelper {
             app.startActivity(app.getIntent());
         });
 
-        Button setupDatabaseButton = (Button) popupView.findViewById(R.id.buttonSetupDatabase);
+        Button setupDatabaseButton = (Button) popupView.findViewById(R.id.confirmationButton);
         setupDatabaseButton.setOnClickListener(view -> {
             app.startDatabase();
         });
@@ -65,6 +69,6 @@ public class OptionsPopUpHelper {
     }
 
     public void showModOptions(View v) {
-
+        showAdminOptions(v);
     }
 }
