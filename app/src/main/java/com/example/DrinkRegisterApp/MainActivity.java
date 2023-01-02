@@ -42,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
         // Makes sure users isn't 0
         users = mDbHelper.getUsers();
         if (users.isEmpty()) {
-            users.add(new User(0, "admin", "temp", "other", "admin", 0));
+            User admin = new User(0, "admin", "temp", "other", "admin", 0);
+            users.add(admin);
+            mDbHelper.insertUser(admin);
         }
 
         loginLabel = (TextView) findViewById(R.id.loginLabel);
@@ -209,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startDatabase() {
+        mDbHelper.emptyDb();
         // Creates users
         User vic = new User(0,"Vic", "Vansteelant", "Verkenners", "admin", 1111);
         User jannes = new User(0, "Jannes", "Dekeyzer", "Kapoenen", "mod", 2222);
