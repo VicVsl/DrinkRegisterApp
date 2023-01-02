@@ -1,5 +1,7 @@
 package com.example.DrinkRegisterApp;
 
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
@@ -98,8 +100,9 @@ public class MainActivity extends AppCompatActivity {
         // create the popup window
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = true; // lets taps outside the popup also dismiss it
-        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+        popupWindow.setOutsideTouchable(true);
 
         ppuHelper.setupPinButtons(popupView, popupWindow);
 
@@ -115,8 +118,9 @@ public class MainActivity extends AppCompatActivity {
         View popupView = inflater.inflate(R.layout.log, null);
 
         // create the popup window
-        boolean focusable = true; // lets taps outside the popup also dismiss it
-        final PopupWindow popupWindow = new PopupWindow(popupView, 1200, 1300, focusable);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 1200, 1300, true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+        popupWindow.setOutsideTouchable(true);
 
         TextView logText = (TextView) popupView.findViewById(R.id.logText);
         String text = mDbHelper.getLog().toString();
@@ -135,8 +139,9 @@ public class MainActivity extends AppCompatActivity {
         View popupView = inflater.inflate(R.layout.check_balance, null);
 
         // create the popup window
-        boolean focusable = true; // lets taps outside the popup also dismiss it
-        final PopupWindow popupWindow = new PopupWindow(popupView, 900, 1000, focusable);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 900, 1000, true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+        popupWindow.setOutsideTouchable(true);
 
         TextView balanceTotal = (TextView) popupView.findViewById(R.id.balanceTotal);
         balanceTotal.setText(login.getBalance() + "€");
@@ -157,8 +162,9 @@ public class MainActivity extends AppCompatActivity {
         View popupView = inflater.inflate(R.layout.confirm_changes, null);
 
         // create the popup window
-        boolean focusable = true; // lets taps outside the popup also dismiss it
-        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 1000, focusable);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 1000, true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+        popupWindow.setOutsideTouchable(true);
 
         TextView changesText = (TextView) popupView.findViewById(R.id.changesText);
         changesText.setText(changes.toString());
@@ -184,8 +190,9 @@ public class MainActivity extends AppCompatActivity {
         View popupView = inflater.inflate(R.layout.create_user, null);
 
         // create the popup window
-        boolean focusable = true; // lets taps outside the popup also dismiss it
-        final PopupWindow popupWindow = new PopupWindow(popupView, 1200, 1300, focusable);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 1200, 1300, true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+        popupWindow.setOutsideTouchable(true);
 
         EditText firstNameInput = (EditText) popupView.findViewById(R.id.firstNameInput);
         EditText lastNameInput = (EditText) popupView.findViewById(R.id.lastNameInput);

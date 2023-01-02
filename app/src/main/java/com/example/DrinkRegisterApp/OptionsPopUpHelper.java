@@ -2,6 +2,8 @@ package com.example.DrinkRegisterApp;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,8 +39,9 @@ public class OptionsPopUpHelper {
         View popupView = inflater.inflate(R.layout.admin_options, null);
 
         // create the popup window
-        boolean focusable = true; // lets taps outside the popup also dismiss it
-        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 1200, focusable);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 1200, true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+        popupWindow.setOutsideTouchable(true);
 
         Button checkBalanceButton = (Button) popupView.findViewById(R.id.checkBalanceButton);
         checkBalanceButton.setOnClickListener(view -> {
