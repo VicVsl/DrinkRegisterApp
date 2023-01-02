@@ -48,7 +48,8 @@ public class OptionsPopUpHelper {
 
         Button createUserButton = (Button) popupView.findViewById(R.id.buttonCreateUser);
         createUserButton.setOnClickListener(view -> {
-            //TODO
+            popupWindow.dismiss();
+            app.showCreateUser(view);
         });
 
         Button emptyDatabaseButton = (Button) popupView.findViewById(R.id.buttonEmptyDatabase);

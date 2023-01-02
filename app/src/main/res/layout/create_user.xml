@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey">
+
+    <TextView
+        android:id="@+id/changesTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="NEW USER"
+        android:textColor="@color/yellow"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/confirmationButton"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="30dp"
+        android:text="Confirm"
+        android:textColor="@color/yellow"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <EditText
+        android:id="@+id/firstNameInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="28dp"
+        android:ems="8"
+        android:hint="First Name"
+        android:inputType="textPersonName"
+        android:textColor="@color/yellow"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/lastNameInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changesTitle" />
+
+    <EditText
+        android:id="@+id/lastNameInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:ems="8"
+        android:hint="Last Name"
+        android:inputType="textPersonName"
+        android:textColor="@color/yellow"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/confirmationButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changesTitle" />
+
+    <EditText
+        android:id="@+id/pinCodeInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:ems="8"
+        android:hint="Pin Code"
+        android:inputType="number"
+        android:textColor="@color/yellow"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/confirmationButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lastNameInput" />
+
+    <RadioGroup
+        android:id="@+id/groupSelect"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:background="@color/light_blue"
+        android:checkedButton="@id/other"
+        android:isScrollContainer="true"
+        android:nestedScrollingEnabled="true"
+        android:showDividers="middle|beginning|end"
+        app:layout_constraintBottom_toTopOf="@+id/confirmationButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changesTitle">
+
+        <RadioButton
+            android:id="@+id/kapoenen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kapoenen"
+            android:textColor="@color/yellow"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/welpen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Welpen"
+            android:textColor="@color/yellow"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/jongverkenners"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Jongverkenners"
+            android:textColor="@color/yellow"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/verkenners"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Verkenners"
+            android:textColor="@color/yellow"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/jins"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Jins"
+            android:textColor="@color/yellow"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/exLeaders"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ex leaders"
+            android:textColor="@color/yellow"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/other"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Other"
+            android:textColor="@color/yellow"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </RadioGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

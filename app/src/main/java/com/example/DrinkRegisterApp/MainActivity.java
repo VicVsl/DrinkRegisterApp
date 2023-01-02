@@ -1,12 +1,16 @@
 package com.example.DrinkRegisterApp;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
             if (!verified) {
                 finish();
                 System.exit(0);
+            }
+            if (changes.isEmpty()) {
+                login = null;
+                verified = false;
+                updateScreen();
+                return;
             }
             showConfirmation(view);
         });
@@ -111,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         TextView logText = (TextView) popupView.findViewById(R.id.logText);
         String text = mDbHelper.getLog().toString();
         logText.setText(text);
+        logText.setMovementMethod(new ScrollingMovementMethod());
 
         // show the popup window
         // which view you pass in doesn't matter, it is only used for the window tolken
@@ -131,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         balanceTotal.setText(login.getBalance() + "€");
 
         TextView balanceHistory = (TextView) popupView.findViewById(R.id.balanceHistory);
-        String text = mDbHelper.findLogByName(login.getFirstName() + " " + login.getLastName().charAt(0) + ".").toString();
+        String text = mDbHelper.findLogByName(createShortName(login)).toString();
         balanceHistory.setText(text);
 
         // show the popup window
@@ -166,15 +177,48 @@ public class MainActivity extends AppCompatActivity {
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
     }
 
+    public void showCreateUser(View v) {
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.create_user, null);
+
+        // create the popup window
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, 1200, 1300, focusable);
+
+        EditText firstNameInput = (EditText) popupView.findViewById(R.id.firstNameInput);
+        EditText lastNameInput = (EditText) popupView.findViewById(R.id.lastNameInput);
+        EditText pinCodeInput = (EditText) popupView.findViewById(R.id.pinCodeInput);
+        RadioGroup groupSelect = (RadioGroup ) popupView.findViewById(R.id.groupSelect);
+
+        Button confirmButton = (Button) popupView.findViewById(R.id.confirmationButton);
+        confirmButton.setOnClickListener(view -> {
+            String firstName = firstNameInput.getText().toString();
+            String lastName = lastNameInput.getText().toString();
+            int pincode = Integer.parseInt(pinCodeInput.getText().toString());
+            int buttonId = groupSelect.getCheckedRadioButtonId();
+            RadioButton button = (RadioButton) popupView.findViewById(buttonId);
+            String group = button.getText().toString();
+            User newUser = new User(0, firstName, lastName, group, "regular", pincode);
+            mDbHelper.insertUser(newUser);
+            mDbHelper.insertLog(createShortName(login), createShortName(newUser), "creation", 0);
+            finish();
+            startActivity(getIntent());
+        });
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+    }
+
     public void applyChanges() {
         for (int i = 0; i < changes.size(); i++) {
             Change change = changes.get(i);
             User user = mDbHelper.findUserByName(change.getFirstName(), change.getLastName());
             user.addBalance(0.7 * change.getAmount());
             mDbHelper.updateBalance(user);
-            String name1 = login.getFirstName() + " " + login.getLastName().charAt(0) + ".";
-            String name2 = user.getFirstName() + " " + user.getLastName().charAt(0) + ".";
-            mDbHelper.insertLog(name1, name2, "addition", change.getAmount());
+            mDbHelper.insertLog(createShortName(login), createShortName(user), "addition", change.getAmount());
         }
         changes.clear();
     }
@@ -210,6 +254,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public String createShortName(User user) {
+        return user.getFirstName() + " " + user.getLastName().charAt(0) + ".";
+    }
+
     public void startDatabase() {
         mDbHelper.emptyDb();
         // Creates users
@@ -220,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
         // Inserts the users in the database
         mDbHelper.insertUser(vic);
         mDbHelper.insertUser(jannes);
-        for(int i = 0; i < 30; i++ ) {
+        for(int i = 0; i < 5; i++ ) {
             mDbHelper.insertUser(bavo);
         }
         finish();

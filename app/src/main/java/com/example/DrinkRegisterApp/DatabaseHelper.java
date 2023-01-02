@@ -63,12 +63,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<String> getLog() {
         SQLiteDatabase db = getReadableDatabase();
-        String sql = "SELECT * FROM log WHERE amount_ > 0";
+        String sql = "SELECT * FROM log";
         Cursor cursor = db.rawQuery(sql, null);
 
         List<String> log = new ArrayList<>();
         while (cursor.moveToNext()) {
-            String logLine = '\n' + cursor.getString(1) + " added to " + cursor.getString(2) + " : " + cursor.getInt(4);
+            String logLine;
+            switch (cursor.getString(3)) {
+                case "addition":
+                    logLine = '\n' + cursor.getString(1) + " added to " + cursor.getString(2) + " : " + cursor.getInt(4);
+                    break;
+                case "creation":
+                    logLine = '\n' + cursor.getString(1) + " created user " + cursor.getString(2);
+                    break;
+                default:
+                    logLine = "Something went wrong";
+                    break;
+            }
             log.add(logLine);
         }
         cursor.close();
@@ -95,7 +106,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<User> users = new ArrayList<>();
 
         SQLiteDatabase db = getReadableDatabase();
-        String sql = "SELECT * FROM users WHERE balance >= 0";
+        String sql = "SELECT * FROM users";
         Cursor cursor = db.rawQuery(sql, null);
 
         while (cursor.moveToNext()) {
