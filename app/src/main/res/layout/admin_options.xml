@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/changesTitle" />
 
     <Button
-        android:id="@+id/buttonCreateUser"
+        android:id="@+id/createUserButton"
         android:layout_width="300dp"
         android:layout_height="110dp"
         android:layout_marginTop="20dp"
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/checkBalanceButton" />
 
     <Button
-        android:id="@+id/buttonEmptyDatabase"
+        android:id="@+id/emptyDatabaseButton"
         android:layout_width="300dp"
         android:layout_height="110dp"
         android:layout_marginTop="20dp"
@@ -51,10 +51,10 @@
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCreateUser" />
+        app:layout_constraintTop_toBottomOf="@+id/createUserButton" />
 
     <Button
-        android:id="@+id/confirmationButton"
+        android:id="@+id/setupDatabaseButton"
         android:layout_width="300dp"
         android:layout_height="110dp"
         android:layout_marginTop="20dp"
@@ -63,7 +63,7 @@
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonEmptyDatabase" />
+        app:layout_constraintTop_toBottomOf="@+id/emptyDatabaseButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

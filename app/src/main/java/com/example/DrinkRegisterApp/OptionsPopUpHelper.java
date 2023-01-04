@@ -1,11 +1,7 @@
 package com.example.DrinkRegisterApp;
 
-import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
+import android.annotation.SuppressLint;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.PopupWindow;
@@ -31,17 +27,10 @@ public class OptionsPopUpHelper {
         }
     }
 
-
+    @SuppressLint("InflateParams")
     public void showAdminOptions(View v) {
-        // inflate the layout of the popup window
-        LayoutInflater inflater = (LayoutInflater)
-                app.getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.admin_options, null);
-
-        // create the popup window
-        final PopupWindow popupWindow = new PopupWindow(popupView, 500, 650, true);
-        popupWindow.setBackgroundDrawable(new ColorDrawable());
-        popupWindow.setOutsideTouchable(true);
+        View popupView = app.getInflater().inflate(R.layout.admin_options, null);
+        PopupWindow popupWindow = app.createPopup(popupView, 500, 650);
 
         Button checkBalanceButton = (Button) popupView.findViewById(R.id.checkBalanceButton);
         checkBalanceButton.setOnClickListener(view -> {
@@ -49,26 +38,22 @@ public class OptionsPopUpHelper {
             app.showBalance(view);
         });
 
-        Button createUserButton = (Button) popupView.findViewById(R.id.buttonCreateUser);
+        Button createUserButton = (Button) popupView.findViewById(R.id.createUserButton);
         createUserButton.setOnClickListener(view -> {
             popupWindow.dismiss();
             app.showCreateUser(view);
         });
 
-        Button emptyDatabaseButton = (Button) popupView.findViewById(R.id.buttonEmptyDatabase);
+        Button emptyDatabaseButton = (Button) popupView.findViewById(R.id.emptyDatabaseButton);
         emptyDatabaseButton.setOnClickListener(view -> {
             app.getMdbHelper().emptyDb();
             app.finish();
             app.startActivity(app.getIntent());
         });
 
-        Button setupDatabaseButton = (Button) popupView.findViewById(R.id.confirmationButton);
-        setupDatabaseButton.setOnClickListener(view -> {
-            app.startDatabase();
-        });
+        Button setupDatabaseButton = (Button) popupView.findViewById(R.id.setupDatabaseButton);
+        setupDatabaseButton.setOnClickListener(view -> app.startDatabase());
 
-        // show the popup window
-        // which view you pass in doesn't matter, it is only used for the window tolken
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
     }
 

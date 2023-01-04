@@ -1,6 +1,7 @@
 package com.example.DrinkRegisterApp;
 
-import android.content.res.Resources;
+import android.annotation.SuppressLint;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.PopupWindow;
@@ -9,11 +10,22 @@ import android.widget.TextView;
 public class PinPopUpHelper {
 
     private final MainActivity app;
+
     private String pinCode;
     private TextView pinCodeProgress;
 
     public PinPopUpHelper(MainActivity app) {
         this.app = app;
+    }
+
+    @SuppressLint("InflateParams")
+    public void showPincode(View view) {
+        View popupView = app.getInflater().inflate(R.layout.pincode, null);
+        PopupWindow popupWindow = app.createPopup(popupView, -2, -2);
+
+        setupPinButtons(popupView, popupWindow);
+
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
     }
 
     public void setupPinButtons(View v, PopupWindow window) {
@@ -34,7 +46,7 @@ public class PinPopUpHelper {
             if (!pinCode.isEmpty() && app.verifyPinCode(pinCode)) {
                 window.dismiss();
             } else {
-                pinCodeHeader.setText("Incorrect pincode!");
+                pinCodeHeader.setText(app.getResources().getString(R.string.invalid_pincode));
                 pinCodeHeader.setTextColor(app.getResources().getColor(R.color.red));
                 pinCode = "";
                 setProgress();

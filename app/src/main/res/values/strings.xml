@@ -1,16 +1,24 @@
 <resources>
     <!-- Standard text for the program -->
     <string name="app_name">Drink Register App</string>
-    <string name="confirm">Confirm</string>
     <string name="app_organization" translatable="false">Scouts Gits</string>
+    <string name="confirm">Confirm</string>
 
-    <!-- pincode -->
-    <string name="pincode_header">Enter pincode:</string>
-    <string name="ok_button" translatable="false">OK</string>
-    <string name="cor_button" translatable="false">COR</string>
+    <!-- admin_options -->
+    <string name="options_header">Options</string>
+    <string name="check_balance">Check balance</string>
+    <string name="create_user">Create User</string>
+    <string name="empty_database">Empty Database</string>
+    <string name="setup_database">Setup Database</string>
+
+    <!-- check_balance -->
+    <string name="balance_title">Balance</string>
+
+    <!-- confirm_changes -->
+    <string name="changes_title">Changes</string>
 
     <!-- create_user -->
-    <string name="create_user_header">NEW USER</string>
+    <string name="create_user_header">New user</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="pin_code">Pincode</string>
@@ -22,18 +30,21 @@
     <string name="group6">Ex leaders</string>
     <string name="group7">Other</string>
 
-    <!-- confirm_changes -->
-    <string name="changes_title">Changes</string>
+    <!-- log -->
+    <string name="addition">added to</string>
+    <string name="creation">created user</string>
+    <string name="error">Something went wrong!</string>
 
-    <!-- check_balance -->
-    <string name="balance_title">Balance</string>
+    <!-- main_screen -->
+    <string name="exit" translatable="false">exit</string>
+    <string name="log" translatable="false">log</string>
+    <string name="log_out">log out</string>
 
-    <!-- admin_options -->
-    <string name="options_header">Options</string>
-    <string name="check_balance">Check balance</string>
-    <string name="create_user">Create User</string>
-    <string name="empty_database">Empty Database</string>
-    <string name="setup_database">Setup Database</string>
+    <!-- pincode -->
+    <string name="pincode_header">Enter pincode:</string>
+    <string name="cor_button" translatable="false">COR</string>
+    <string name="ok_button" translatable="false">OK</string>
+    <string name="invalid_pincode">Incorrect pincode!</string>
 
 
 </resources>

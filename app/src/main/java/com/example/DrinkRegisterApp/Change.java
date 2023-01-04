@@ -1,5 +1,7 @@
 package com.example.DrinkRegisterApp;
 
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 
 public class Change {
@@ -43,6 +45,7 @@ public class Change {
         return Objects.hash(firstName, lastName);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return '\n' + firstName + ' ' + lastName.charAt(0) + ". : " + amount;

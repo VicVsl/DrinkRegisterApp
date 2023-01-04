@@ -4,8 +4,18 @@
     <string name="app_name">Streepjes App</string>
     <string name="confirm">Bevestigen</string>
 
-    <!-- pincode -->
-    <string name="pincode_header">Pincode invoeren:</string>
+    <!-- admin_options -->
+    <string name="options_header">Opties</string>
+    <string name="check_balance">Onkosten</string>
+    <string name="create_user">Registreer gebruiker</string>
+    <string name="empty_database">Database leegmaken</string>
+    <string name="setup_database">Database starten</string>
+
+    <!-- check_balance -->
+    <string name="balance_title">Onkosten</string>
+
+    <!-- confirm_changes -->
+    <string name="changes_title">Streepjes</string>
 
     <!-- create_user -->
     <string name="create_user_header">Registreer gebruiker</string>
@@ -20,18 +30,17 @@
     <string name="group6">Oud-leiding</string>
     <string name="group7">Andere</string>
 
-    <!-- confirm_changes -->
-    <string name="changes_title">Streepjes</string>
+    <!-- log -->
+    <string name="addition">toegevoegd aan</string>
+    <string name="creation">registreerde</string>
+    <string name="error">Iets liep mis!</string>
 
-    <!-- check_balance -->
-    <string name="balance_title">Onkosten</string>
+    <!-- main_screen -->
+    <string name="log_out">log uit</string>
 
-    <!-- admin_options -->
-    <string name="options_header">Opties</string>
-    <string name="check_balance">Onkosten</string>
-    <string name="create_user">Registreer gebruiker</string>
-    <string name="empty_database">Database leegmaken</string>
-    <string name="setup_database">Database starten</string>
+    <!-- pincode -->
+    <string name="pincode_header">Pincode invoeren:</string>
+    <string name="invalid_pincode">Foute pincode!</string>
 
 
 </resources>
