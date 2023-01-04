@@ -40,6 +40,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(sqlUsers);
         String sqlLog = "DELETE FROM log";
         db.execSQL(sqlLog);
+        app.finish();
+        app.startActivity(app.getIntent());
     }
 
     //------------------------- Handles users ---------------------------------------//
@@ -77,6 +79,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return users;
+    }
+
+    public List<String> getBalances() {
+        List<String> balances = new ArrayList<>();
+
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "SELECT * FROM users";
+        Cursor cursor = db.rawQuery(sql, null);
+
+        while (cursor.moveToNext()) {
+            String firstName = cursor.getString(1);
+            String lastName = cursor.getString(2);
+            int balance = cursor.getInt(5);
+
+            balances.add('\n' + firstName + " " + lastName + " : " + balance);
+        }
+        cursor.close();
+        Collections.sort(balances);
+        return balances;
     }
 
     public User findUserByName(String fName, String lName) {
@@ -214,24 +235,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Collections.reverse(log);
         return log;
     }
-
-
-    //Can be deleted when the app is finished
-    public void startDatabase() {
-        emptyDb();
-        // Creates users
-        User vic = new User(0,"Vic", "Vansteelant", "Verkenners", "admin", 10, 1111);
-        User jannes = new User(0, "Jannes", "Dekeyzer", "Kapoenen", "mod", 5, 2222);
-        User bavo = new User(0, "Bavo", "Dewaele", "Jins", "regular", 100, 3333);
-
-        // Inserts the users in the database
-        insertUser(vic);
-        insertUser(jannes);
-        for(int i = 0; i < 10; i++ ) {
-            insertUser(bavo);
-        }
-        app.finish();
-        app.startActivity(app.getIntent());
-    }
-
 }

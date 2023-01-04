@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import java.util.List;
+
 @SuppressLint("InflateParams")
 public class OptionsPopUpHelper {
 
@@ -119,8 +121,47 @@ public class OptionsPopUpHelper {
             counter++;
             if (counter == 5) {
                 counter = 0;
-                app.getDbHelper().startDatabase();
+                popupWindow.dismiss();
+                showAdminOptions2(view);
             }
+        });
+
+        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+    }
+
+    public void showAdminOptions2(View v) {
+        View popupView = app.getInflater().inflate(R.layout.admin_options, null);
+        PopupWindow popupWindow = app.createPopup(popupView, 500, 650);
+
+        Button getBalancesButton = popupView.findViewById(R.id.getBalancesButton);
+        getBalancesButton.setOnClickListener(view -> {
+            popupWindow.dismiss();
+            app.showAllBalances(view);
+        });
+
+        Button resetBalancesButton = popupView.findViewById(R.id.resetBalancesButton);
+        resetBalancesButton.setOnClickListener(view -> {
+            popupWindow.dismiss();
+            List<User> users = app.getDbHelper().getUsers();
+            for (User user : users) {
+                int balance = user.getBalance();
+                user.addBalance(-balance);
+                app.getDbHelper().updateBalance(user);
+                app.getDbHelper().insertLog(app.getLogin().createShortName(), user.createShortName(), "deletion", balance);
+            }
+            app.leftButtonHandler(view);
+        });
+
+        Button printDatabaseButton = popupView.findViewById(R.id.printDatabaseButton);
+        printDatabaseButton.setOnClickListener(view -> {
+            popupWindow.dismiss();
+            app.showDatabase(view);
+        });
+
+        Button emptyDatabaseButton = popupView.findViewById(R.id.emptyDatabaseButton);
+        emptyDatabaseButton.setOnClickListener(view -> {
+            popupWindow.dismiss();
+            app.getDbHelper().emptyDb();
         });
 
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);

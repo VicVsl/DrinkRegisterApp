@@ -63,8 +63,11 @@
     <string name="create_user">Registreer gebruiker</string>
     <string name="edit_user">Gebruiker aanpassen</string>
     <!-- admin_options -->
+    <string name="admin_options_header">Admin opties</string>
+    <string name="get_balances">Alle onkosten</string>
+    <string name="reset_balances">Onkosten resetten</string>
+    <string name="print_database">Print Database</string>
     <string name="empty_database">Database leegmaken</string>
-    <string name="setup_database">Database starten</string>
 
 
 </resources>

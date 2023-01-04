@@ -167,6 +167,29 @@ public class MainActivity extends AppCompatActivity {
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
     }
 
+    public void showAllBalances(View v) {
+        View popupView = inflater.inflate(R.layout.log, null);
+        PopupWindow popupWindow = createPopup(popupView, -2, -2);
+
+        TextView logText = popupView.findViewById(R.id.logText);
+        logText.setText(printList(dbHelper.getBalances()));
+        logText.setMovementMethod(new ScrollingMovementMethod());
+
+        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void showDatabase(View v) {
+        View popupView = inflater.inflate(R.layout.log, null);
+        PopupWindow popupWindow = createPopup(popupView, -2, -2);
+
+        TextView logText = popupView.findViewById(R.id.logText);
+        logText.setText("U" + printList(dbHelper.getUsers()));
+        logText.setMovementMethod(new ScrollingMovementMethod());
+
+        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+    }
+
     public void enableEditMode() {
         editMode = true;
         loginLabel.setText(R.string.edit_mode);

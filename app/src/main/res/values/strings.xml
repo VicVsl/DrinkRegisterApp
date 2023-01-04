@@ -70,8 +70,11 @@
     <string name="create_user">Create User</string>
     <string name="edit_user">Edit User</string>
     <!-- admin_options -->
+    <string name="admin_options_header">Admin options</string>
+    <string name="get_balances">Reset balances</string>
+    <string name="reset_balances">Reset balances</string>
+    <string name="print_database">Print Database</string>
     <string name="empty_database">Empty Database</string>
-    <string name="setup_database">Setup Database</string>
 
 
 </resources>
