@@ -4,13 +4,6 @@
     <string name="app_name">Streepjes App</string>
     <string name="confirm">Bevestigen</string>
 
-    <!-- admin_options -->
-    <string name="options_header">Opties</string>
-    <string name="check_balance">Onkosten</string>
-    <string name="create_user">Registreer gebruiker</string>
-    <string name="empty_database">Database leegmaken</string>
-    <string name="setup_database">Database starten</string>
-
     <!-- check_balance -->
     <string name="balance_title">Onkosten</string>
 
@@ -44,7 +37,19 @@
 
     <!-- pincode -->
     <string name="pincode_header">Pincode invoeren:</string>
+    <string name="update_pincode">Nieuwe pincode:</string>
     <string name="invalid_pincode">Foute pincode!</string>
+    <string name="updated_notification">Pincode Veranderd!</string>
+
+    <!-- regular_options -->
+    <string name="options_header">Opties</string>
+    <string name="check_balance">Onkosten</string>
+    <string name="change_pincode">Verander pincode</string>
+    <!-- mod_options -->
+    <string name="create_user">Registreer gebruiker</string>
+    <!-- admin_options -->
+    <string name="empty_database">Database leegmaken</string>
+    <string name="setup_database">Database starten</string>
 
 
 </resources>

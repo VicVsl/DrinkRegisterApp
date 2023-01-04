@@ -16,6 +16,7 @@
         android:text="@string/pincode_header"
         android:textColor="@color/yellow"
         android:textSize="50sp"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

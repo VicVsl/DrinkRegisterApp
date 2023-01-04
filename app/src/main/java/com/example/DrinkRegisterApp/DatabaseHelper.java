@@ -107,6 +107,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update("users", values, "id LIKE ?", selectionArgs);
     }
 
+    public void updatePincode(int id, int pincode) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("pin_code", pincode);
+        String[] selectionArgs = {id + ""};
+
+        db.update("users", values, "id LIKE ?", selectionArgs);
+    }
+
 //    public void updateRank(User user) {
 //        SQLiteDatabase db = getWritableDatabase();
 //        ContentValues values = new ContentValues();

@@ -66,6 +66,8 @@ public class User {
         return pinCode;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

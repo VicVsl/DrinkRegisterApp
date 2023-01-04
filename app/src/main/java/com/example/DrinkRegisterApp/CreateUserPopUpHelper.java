@@ -31,28 +31,21 @@ public class CreateUserPopUpHelper {
     public void validateUser(View v) {
         EditText firstNameInput = v.findViewById(R.id.firstNameInput);
         String firstName = firstNameInput.getText().toString();
-        if (firstName.isEmpty()) {
-            firstNameInput.setError(app.getResources().getString(R.string.empty_field));
-        } else if (!Character.isUpperCase(firstName.charAt(0))) {
-            firstNameInput.setError(app.getResources().getString(R.string.name_uppercase));
-        }
+        if (firstName.isEmpty()) firstNameInput.setError(app.getResources().getString(R.string.empty_field));
+        else if (!Character.isUpperCase(firstName.charAt(0))) firstNameInput.setError(app.getResources().getString(R.string.name_uppercase));
 
         EditText lastNameInput = v.findViewById(R.id.lastNameInput);
         String lastName = lastNameInput.getText().toString();
-        if (lastName.isEmpty()) {
-            lastNameInput.setError(app.getResources().getString(R.string.empty_field));
-        } else if (!Character.isUpperCase(lastName.charAt(0))) {
-            lastNameInput.setError(app.getResources().getString(R.string.name_uppercase));
-        }
+        if (lastName.isEmpty()) lastNameInput.setError(app.getResources().getString(R.string.empty_field));
+        else if (!Character.isUpperCase(lastName.charAt(0))) lastNameInput.setError(app.getResources().getString(R.string.name_uppercase));
 
         EditText pinCodeInput = v.findViewById(R.id.pinCodeInput);
         int pincode = 0;
         String pincodeText = pinCodeInput.getText().toString();
-        if (pincodeText.isEmpty()) {
-            pinCodeInput.setError(app.getResources().getString(R.string.empty_field));
-        } else if (pincodeText.length() < 2 || pincodeText.length() > 6) {
+        if (pincodeText.isEmpty()) pinCodeInput.setError(app.getResources().getString(R.string.empty_field));
+        else if (pincodeText.length() < 2 || pincodeText.length() > 6)
             pinCodeInput.setError(app.getResources().getString(R.string.pincode_length));
-        } else try {
+        else try {
             pincode = Integer.parseInt(pincodeText);
         } catch (Exception e) {
             pinCodeInput.setError(app.getResources().getString(R.string.invalid_number));

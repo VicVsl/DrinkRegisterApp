@@ -52,6 +52,7 @@ public class ButtonListAdapter extends RecyclerView.Adapter<ButtonListAdapter.Bu
                 } else {
                     app.setLogin(user);
                 }
+                app.getPpuHelper().setUpdate(false);
                 app.getPpuHelper().showPincode(view);
             }
         });

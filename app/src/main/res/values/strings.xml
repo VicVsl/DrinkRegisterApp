@@ -4,13 +4,6 @@
     <string name="app_organization" translatable="false">Scouts Gits</string>
     <string name="confirm">Confirm</string>
 
-    <!-- admin_options -->
-    <string name="options_header">Options</string>
-    <string name="check_balance">Check balance</string>
-    <string name="create_user">Create User</string>
-    <string name="empty_database">Empty Database</string>
-    <string name="setup_database">Setup Database</string>
-
     <!-- check_balance -->
     <string name="balance_title">Balance</string>
 
@@ -46,9 +39,21 @@
 
     <!-- pincode -->
     <string name="pincode_header">Enter pincode:</string>
+    <string name="update_pincode">New pincode:</string>
     <string name="cor_button" translatable="false">COR</string>
     <string name="ok_button" translatable="false">OK</string>
     <string name="invalid_pincode">Incorrect pincode!</string>
+    <string name="updated_notification">Pincode updated!</string>
+
+    <!-- regular_options -->
+    <string name="options_header">Options</string>
+    <string name="check_balance">Check balance</string>
+    <string name="change_pincode">Change pincode</string>
+    <!-- mod_options -->
+    <string name="create_user">Create User</string>
+    <!-- admin_options -->
+    <string name="empty_database">Empty Database</string>
+    <string name="setup_database">Setup Database</string>
 
 
 </resources>

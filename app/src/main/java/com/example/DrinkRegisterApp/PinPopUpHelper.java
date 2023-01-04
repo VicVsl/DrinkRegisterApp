@@ -12,7 +12,9 @@ public class PinPopUpHelper {
     private final MainActivity app;
 
     private String pinCode;
+    private TextView pinCodeHeader;
     private TextView pinCodeProgress;
+    private boolean update;
 
     public PinPopUpHelper(MainActivity app) {
         this.app = app;
@@ -31,18 +33,19 @@ public class PinPopUpHelper {
     public void setupPinButtons(View v, PopupWindow window) {
         pinCode = "";
 
-        TextView pinCodeHeader = v.findViewById(R.id.pinCodeHeader);
-        pinCodeProgress = v.findViewById(R.id.pinCodeProgress);
+        pinCodeHeader = v.findViewById(R.id.pinCodeHeader);
+        if (update) pinCodeHeader.setText(app.getResources().getString(R.string.update_pincode));
 
-        Button corButton = v.findViewById(R.id.buttonCOR);
-        corButton.setOnClickListener(view -> {
-            if (pinCode.isEmpty()) return;
-            pinCode = pinCode.substring(0, pinCode.length()-1);
-            setProgress();
-        });
+        pinCodeProgress = v.findViewById(R.id.pinCodeProgress);
+        pinCodeProgress.setOnClickListener(view -> pinCodeProgress.setText(pinCode));
 
         Button enterButton = v.findViewById(R.id.buttonENTER);
         enterButton.setOnClickListener(view -> {
+            if (update) {
+                updatePincode();
+                if (!update) window.dismiss();
+                return;
+            }
             if (!pinCode.isEmpty() && verifyPinCode(pinCode)) {
                 window.dismiss();
             } else {
@@ -51,6 +54,13 @@ public class PinPopUpHelper {
                 pinCode = "";
                 setProgress();
             }
+        });
+
+        Button corButton = v.findViewById(R.id.buttonCOR);
+        corButton.setOnClickListener(view -> {
+            if (pinCode.isEmpty()) return;
+            pinCode = pinCode.substring(0, pinCode.length()-1);
+            setProgress();
         });
 
         Button button1 = v.findViewById(R.id.button1);
@@ -123,12 +133,29 @@ public class PinPopUpHelper {
         return false;
     }
 
-
     public void setProgress() {
         StringBuilder text = new StringBuilder();
         for (int i = 0; i < pinCode.length(); i++) {
             text.append('*');
         }
         pinCodeProgress.setText(text.toString());
+    }
+
+    public void updatePincode() {
+        if (pinCode.length() < 2 || pinCode.length() > 6) {
+            pinCodeHeader.setText(app.getResources().getString(R.string.pincode_length));
+            pinCodeHeader.setTextSize(45);
+            pinCodeHeader.setTextColor(app.getResources().getColor(R.color.red));
+            pinCode = "";
+            setProgress();
+            return;
+        }
+        int pincode = Integer.parseInt(pinCode);
+        app.getMdbHelper().updatePincode(app.getLogin().getId(), pincode);
+        update = false;
+    }
+
+    public void setUpdate(boolean update) {
+        this.update = update;
     }
 }
