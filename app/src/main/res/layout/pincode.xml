@@ -2,9 +2,34 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="500dp"
-    android:layout_height="700dp"
-    android:background="@color/grey">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/grey"
+    tools:ignore="HardcodedText" >
+
+
+    <TextView
+        android:id="@+id/pinCodeHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/pincode_header"
+        android:textColor="@color/yellow"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/pinCodeProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/yellow"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pinCodeHeader" />
 
     <Button
         android:id="@+id/button1"
@@ -16,7 +41,7 @@
         android:textColor="@color/yellow"
         android:textSize="50sp"
         app:layout_constraintBottom_toTopOf="@+id/button4"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <Button
         android:id="@+id/button2"
@@ -42,8 +67,19 @@
         android:textColor="@color/yellow"
         android:textSize="50sp"
         app:layout_constraintBottom_toTopOf="@+id/button6"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="SpeakableTextPresentCheck" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="20dp"
+        android:text="4"
+        android:textColor="@color/yellow"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toTopOf="@+id/button7"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button5"
@@ -72,15 +108,15 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/button7"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="50dp"
         android:layout_marginBottom="20dp"
-        android:text="4"
+        android:text="7"
         android:textColor="@color/yellow"
         android:textSize="50sp"
-        app:layout_constraintBottom_toTopOf="@+id/button7"
+        app:layout_constraintBottom_toTopOf="@id/buttonCOR"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -106,19 +142,19 @@
         android:text="9"
         android:textColor="@color/yellow"
         android:textSize="50sp"
-        app:layout_constraintBottom_toTopOf="@+id/button0"
+        app:layout_constraintBottom_toTopOf="@id/buttonENTER"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/buttonCOR"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="50dp"
-        android:layout_marginBottom="20dp"
-        android:text="7"
+        android:layout_marginBottom="50dp"
+        android:text="@string/cor_button"
         android:textColor="@color/yellow"
-        android:textSize="50sp"
-        app:layout_constraintBottom_toTopOf="@+id/button0"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -127,7 +163,7 @@
         android:layout_height="100dp"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="50dp"
         android:text="0"
         android:textColor="@color/yellow"
         android:textSize="50sp"
@@ -136,50 +172,15 @@
         app:layout_constraintStart_toEndOf="@+id/buttonCOR" />
 
     <Button
-        android:id="@+id/buttonCOR"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginBottom="20dp"
-        android:text="COR"
-        android:textColor="@color/yellow"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
         android:id="@+id/buttonENTER"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginEnd="50dp"
-        android:layout_marginBottom="20dp"
-        android:text="ENTER"
+        android:layout_marginBottom="50dp"
+        android:text="@string/ok_button"
         android:textColor="@color/yellow"
-        android:textSize="19sp"
+        android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/pinCodeHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:text="Enter pincode:"
-        android:textColor="@color/yellow"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/pinCodeProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/yellow"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pinCodeHeader" />
 </androidx.constraintlayout.widget.ConstraintLayout>

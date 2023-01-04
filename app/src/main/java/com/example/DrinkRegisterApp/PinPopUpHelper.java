@@ -103,10 +103,10 @@ public class PinPopUpHelper {
     }
 
     public void setProgress() {
-        String text = "";
+        StringBuilder text = new StringBuilder();
         for (int i = 0; i < pinCode.length(); i++) {
-            text += '*';
+            text.append('*');
         }
-        pinCodeProgress.setText(text);
+        pinCodeProgress.setText(text.toString());
     }
 }

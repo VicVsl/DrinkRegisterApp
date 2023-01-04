@@ -30,7 +30,6 @@ public class ButtonListAdapter extends RecyclerView.Adapter<ButtonListAdapter.Bu
         return new ButtonViewHolder(view);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onBindViewHolder(ButtonViewHolder holder, int position) {
         User user = app.getUsers().get(position);
@@ -59,7 +58,7 @@ public class ButtonListAdapter extends RecyclerView.Adapter<ButtonListAdapter.Bu
                 } else {
                     app.setLogin(user);
                 }
-                app.onButtonShowPopupWindowClick(view);
+                app.showPincode(view);
             }
         });
     }

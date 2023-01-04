@@ -39,7 +39,7 @@ public class OptionsPopUpHelper {
         View popupView = inflater.inflate(R.layout.admin_options, null);
 
         // create the popup window
-        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 1200, true);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 500, 650, true);
         popupWindow.setBackgroundDrawable(new ColorDrawable());
         popupWindow.setOutsideTouchable(true);
 

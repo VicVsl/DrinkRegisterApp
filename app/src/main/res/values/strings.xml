@@ -1,5 +1,39 @@
 <resources>
+    <!-- Standard text for the program -->
     <string name="app_name">Drink Register App</string>
-    <string name="action_settings">Settings</string>
-    <string name="exit_button">EXIT</string>
+    <string name="confirm">Confirm</string>
+    <string name="app_organization" translatable="false">Scouts Gits</string>
+
+    <!-- pincode -->
+    <string name="pincode_header">Enter pincode:</string>
+    <string name="ok_button" translatable="false">OK</string>
+    <string name="cor_button" translatable="false">COR</string>
+
+    <!-- create_user -->
+    <string name="create_user_header">NEW USER</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="pin_code">Pincode</string>
+    <string name="group1">Kapoenen</string>
+    <string name="group2">Welpen</string>
+    <string name="group3">Jongverkenners</string>
+    <string name="group4">Verkenners</string>
+    <string name="group5">Jins</string>
+    <string name="group6">Ex leaders</string>
+    <string name="group7">Other</string>
+
+    <!-- confirm_changes -->
+    <string name="changes_title">Changes</string>
+
+    <!-- check_balance -->
+    <string name="balance_title">Balance</string>
+
+    <!-- admin_options -->
+    <string name="options_header">Options</string>
+    <string name="check_balance">Check balance</string>
+    <string name="create_user">Create User</string>
+    <string name="empty_database">Empty Database</string>
+    <string name="setup_database">Setup Database</string>
+
+
 </resources>

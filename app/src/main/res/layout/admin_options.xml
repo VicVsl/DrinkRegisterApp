@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="500dp"
+    android:layout_height="650dp"
     android:background="@color/grey">
 
     <TextView
@@ -11,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="OPTIONS"
+        android:text="@string/options_header"
         android:textColor="@color/yellow"
         android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,55 +18,52 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonCreateUser"
+        android:id="@+id/checkBalanceButton"
         android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="30dp"
-        android:text="Create User"
-        android:textColor="@color/yellow"
-        android:textSize="35sp"
+        android:layout_height="110dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/check_balance"
+        android:textColor="@color/white"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBalanceButton"
-        tools:ignore="SpeakableTextPresentCheck" />
+        app:layout_constraintTop_toBottomOf="@+id/changesTitle" />
+
+    <Button
+        android:id="@+id/buttonCreateUser"
+        android:layout_width="300dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/create_user"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBalanceButton" />
 
     <Button
         android:id="@+id/buttonEmptyDatabase"
         android:layout_width="300dp"
-        android:layout_height="100dp"
+        android:layout_height="110dp"
         android:layout_marginTop="20dp"
-        android:text="Empty Database"
-        android:textColor="@color/yellow"
+        android:text="@string/empty_database"
+        android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCreateUser"
-        tools:ignore="SpeakableTextPresentCheck" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonCreateUser" />
 
     <Button
         android:id="@+id/confirmationButton"
         android:layout_width="300dp"
-        android:layout_height="100dp"
+        android:layout_height="110dp"
         android:layout_marginTop="20dp"
-        android:text="Setup Database"
-        android:textColor="@color/yellow"
+        android:text="@string/setup_database"
+        android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonEmptyDatabase"
-        tools:ignore="SpeakableTextPresentCheck" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonEmptyDatabase" />
 
-    <Button
-        android:id="@+id/checkBalanceButton"
-        android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="20dp"
-        android:text="Check balance"
-        android:textColor="@color/yellow"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/changesTitle"
-        tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

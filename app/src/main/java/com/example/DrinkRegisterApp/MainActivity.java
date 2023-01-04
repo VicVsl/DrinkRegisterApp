@@ -1,6 +1,5 @@
 package com.example.DrinkRegisterApp;
 
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -21,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,15 +33,19 @@ public class MainActivity extends AppCompatActivity {
     private Button returnButton;
     private Button optionsButton;
     private List<Change> changes;
+    private LayoutInflater inflater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_screen);
         mDbHelper = new DatabaseHelper(this);
         ppuHelper = new PinPopUpHelper(this);
         opuHelper = new OptionsPopUpHelper(this);
         changes = new ArrayList<>();
+
+        inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
 
         // Makes sure users isn't 0
         users = mDbHelper.getUsers();
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         loginLabel = (TextView) findViewById(R.id.loginLabel);
 
         // Configure exit button
-        returnButton = (Button) findViewById(R.id.returnButton);
+        returnButton = (Button) findViewById(R.id.leftButton);
         returnButton.setOnClickListener(view -> {
             if (!verified) {
                 finish();
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Configure options button
-        optionsButton = (Button) findViewById(R.id.optionsButton);
+        optionsButton = (Button) findViewById(R.id.rightButton);
         optionsButton.setOnClickListener(view -> {
             if (!verified) {
                 showLog(view);
@@ -83,26 +85,21 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Configures the list of buttons
-        RecyclerView buttonList = findViewById(R.id.button_list);
+        RecyclerView buttonList = findViewById(R.id.buttonList);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 5);
         buttonList.setLayoutManager(layoutManager);
         ButtonListAdapter adapter = new ButtonListAdapter(this);
         buttonList.setAdapter(adapter);
+
+        updateScreen();
     }
 
-    public void onButtonShowPopupWindowClick(View view) {
+    public void showPincode(View view) {
 
-        // inflate the layout of the popup window
-        LayoutInflater inflater = (LayoutInflater)
-                getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.pin_popup, null);
+        View popupView = inflater.inflate(R.layout.pincode, null);
 
         // create the popup window
-        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
-        popupWindow.setBackgroundDrawable(new ColorDrawable());
-        popupWindow.setOutsideTouchable(true);
+        PopupWindow popupWindow = createPopup(popupView);
 
         ppuHelper.setupPinButtons(popupView, popupWindow);
 
@@ -111,20 +108,28 @@ public class MainActivity extends AppCompatActivity {
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
     }
 
+    public PopupWindow createPopup(View popupView) {
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        popupWindow.setOutsideTouchable(true);
+        return popupWindow;
+    }
+
     public void showLog(View v) {
-        // inflate the layout of the popup window
-        LayoutInflater inflater = (LayoutInflater)
-                getSystemService(LAYOUT_INFLATER_SERVICE);
+
         View popupView = inflater.inflate(R.layout.log, null);
 
         // create the popup window
-        final PopupWindow popupWindow = new PopupWindow(popupView, 1200, 1300, true);
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
         popupWindow.setBackgroundDrawable(new ColorDrawable());
         popupWindow.setOutsideTouchable(true);
 
         TextView logText = (TextView) popupView.findViewById(R.id.logText);
-        String text = mDbHelper.getLog().toString();
-        logText.setText(text);
+        logText.setText(printList(mDbHelper.getLog()));
         logText.setMovementMethod(new ScrollingMovementMethod());
 
         // show the popup window
@@ -133,13 +138,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showBalance(View v) {
-        // inflate the layout of the popup window
-        LayoutInflater inflater = (LayoutInflater)
-                getSystemService(LAYOUT_INFLATER_SERVICE);
+
         View popupView = inflater.inflate(R.layout.check_balance, null);
 
         // create the popup window
-        final PopupWindow popupWindow = new PopupWindow(popupView, 900, 1000, true);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 700, 600, true);
         popupWindow.setBackgroundDrawable(new ColorDrawable());
         popupWindow.setOutsideTouchable(true);
 
@@ -147,29 +150,37 @@ public class MainActivity extends AppCompatActivity {
         balanceTotal.setText(login.getBalance() + "€");
 
         TextView balanceHistory = (TextView) popupView.findViewById(R.id.balanceHistory);
-        String text = mDbHelper.findLogByName(createShortName(login)).toString();
-        balanceHistory.setText(text);
+        balanceHistory.setText(printList(mDbHelper.findLogByName(createShortName(login))));
+        balanceHistory.setMovementMethod(new ScrollingMovementMethod());
 
         // show the popup window
         // which view you pass in doesn't matter, it is only used for the window tolken
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
     }
 
+    @SuppressWarnings("rawtypes")
+    public String printList(List log) {
+        String text = log.toString();
+        if (text.length() < 3) return "";
+        return text.substring(2, text.length() - 1);
+    }
+
     public void showConfirmation(View v) {
-        // inflate the layout of the popup window
-        LayoutInflater inflater = (LayoutInflater)
-                getSystemService(LAYOUT_INFLATER_SERVICE);
+
         View popupView = inflater.inflate(R.layout.confirm_changes, null);
 
         // create the popup window
-        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 1000, true);
+        int width = 400;
+        int height = 500;
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
         popupWindow.setBackgroundDrawable(new ColorDrawable());
         popupWindow.setOutsideTouchable(true);
 
         TextView changesText = (TextView) popupView.findViewById(R.id.changesText);
-        changesText.setText(changes.toString());
+        changesText.setText(printList(changes));
+        changesText.setMovementMethod(new ScrollingMovementMethod());
 
-        Button confirmButton = (Button) popupView.findViewById(R.id.confirmationButton);
+        Button confirmButton = (Button) popupView.findViewById(R.id.confirmButton);
         confirmButton.setOnClickListener(view -> {
             applyChanges();
             login = null;
@@ -184,13 +195,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showCreateUser(View v) {
-        // inflate the layout of the popup window
-        LayoutInflater inflater = (LayoutInflater)
-                getSystemService(LAYOUT_INFLATER_SERVICE);
+
         View popupView = inflater.inflate(R.layout.create_user, null);
 
         // create the popup window
-        final PopupWindow popupWindow = new PopupWindow(popupView, 1200, 1300, true);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 750, 600, true);
         popupWindow.setBackgroundDrawable(new ColorDrawable());
         popupWindow.setOutsideTouchable(true);
 
@@ -249,15 +258,15 @@ public class MainActivity extends AppCompatActivity {
         if (verified) {
             loginLabel.setText(login.getFirstName() + " " + login.getLastName());
             returnButton.setText("LOG OUT");
-            returnButton.setTextSize(18);
+            returnButton.setTextSize(20);
             optionsButton.setText("OPTIONS");
-            optionsButton.setTextSize(18);
+            optionsButton.setTextSize(20);
         } else {
             loginLabel.setText("Scouts Gits");
             returnButton.setText("EXIT");
-            returnButton.setTextSize(25);
+            returnButton.setTextSize(30);
             optionsButton.setText("LOG");
-            optionsButton.setTextSize(25);
+            optionsButton.setTextSize(30);
         }
     }
 
