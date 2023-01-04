@@ -29,6 +29,10 @@
     <string name="group5">Jins</string>
     <string name="group6">Oud-leiding</string>
     <string name="group7">Andere</string>
+    <string name="empty_field">Dit veld kan niet leeg zijn!</string>
+    <string name="name_uppercase">De naam moet starten met een hoofdletter!</string>
+    <string name="pincode_length">De pincode moet tussen de 2 en 6 cijfers zijn!</string>
+    <string name="invalid_number">Dit is geen correcte pincode!</string>
 
     <!-- log -->
     <string name="addition">toegevoegd aan</string>

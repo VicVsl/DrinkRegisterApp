@@ -65,7 +65,7 @@ public class ButtonListAdapter extends RecyclerView.Adapter<ButtonListAdapter.Bu
     // Inner class to hold a reference to each item of RecyclerView
     public static class ButtonViewHolder extends RecyclerView.ViewHolder {
 
-        public Button button;
+        public final Button button;
 
         public ButtonViewHolder(View itemView) {
             super(itemView);

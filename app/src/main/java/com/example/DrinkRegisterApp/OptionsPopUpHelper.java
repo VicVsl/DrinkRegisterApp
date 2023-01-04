@@ -32,27 +32,27 @@ public class OptionsPopUpHelper {
         View popupView = app.getInflater().inflate(R.layout.admin_options, null);
         PopupWindow popupWindow = app.createPopup(popupView, 500, 650);
 
-        Button checkBalanceButton = (Button) popupView.findViewById(R.id.checkBalanceButton);
+        Button checkBalanceButton = popupView.findViewById(R.id.checkBalanceButton);
         checkBalanceButton.setOnClickListener(view -> {
             popupWindow.dismiss();
             app.showBalance(view);
         });
 
-        Button createUserButton = (Button) popupView.findViewById(R.id.createUserButton);
+        Button createUserButton = popupView.findViewById(R.id.createUserButton);
         createUserButton.setOnClickListener(view -> {
             popupWindow.dismiss();
-            app.showCreateUser(view);
+            app.getCupuHelper().showCreateUser(view);
         });
 
-        Button emptyDatabaseButton = (Button) popupView.findViewById(R.id.emptyDatabaseButton);
+        Button emptyDatabaseButton = popupView.findViewById(R.id.emptyDatabaseButton);
         emptyDatabaseButton.setOnClickListener(view -> {
             app.getMdbHelper().emptyDb();
             app.finish();
             app.startActivity(app.getIntent());
         });
 
-        Button setupDatabaseButton = (Button) popupView.findViewById(R.id.setupDatabaseButton);
-        setupDatabaseButton.setOnClickListener(view -> app.startDatabase());
+        Button setupDatabaseButton = popupView.findViewById(R.id.setupDatabaseButton);
+        setupDatabaseButton.setOnClickListener(view -> app.getMdbHelper().startDatabase());
 
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
     }

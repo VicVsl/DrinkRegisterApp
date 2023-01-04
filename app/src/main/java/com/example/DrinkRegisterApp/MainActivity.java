@@ -8,20 +8,19 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.PopupWindow;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @SuppressLint("InflateParams")
 public class MainActivity extends AppCompatActivity {
 
+    private CreateUserPopUpHelper cupuHelper;
     private DatabaseHelper mDbHelper;
     private OptionsPopUpHelper opuHelper;
     private PinPopUpHelper ppuHelper;
@@ -29,19 +28,21 @@ public class MainActivity extends AppCompatActivity {
     private LayoutInflater inflater;
 
     private boolean verified;
-    private List<User> users;
     private User login;
+    private List<User> users;
     private List<Change> changes;
 
     private TextView loginLabel;
     private Button leftButton;
     private Button rightButton;
 
+    @SuppressWarnings("all")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_screen);
 
+        cupuHelper = new CreateUserPopUpHelper(this);
         mDbHelper = new DatabaseHelper(this);
         opuHelper = new OptionsPopUpHelper(this);
         ppuHelper = new PinPopUpHelper(this);
@@ -59,16 +60,17 @@ public class MainActivity extends AppCompatActivity {
             users.add(admin);
             mDbHelper.insertUser(admin);
         }
+        Collections.sort(users, (u1, u2) -> u1.createShortName().compareTo(u2.createShortName()));
 
 
-        loginLabel = (TextView) findViewById(R.id.loginLabel);
+        loginLabel = findViewById(R.id.loginLabel);
 
         // Configure exit button
-        leftButton = (Button) findViewById(R.id.leftButton);
+        leftButton = findViewById(R.id.leftButton);
         leftButton.setOnClickListener(this::leftButtonHandler);
 
         // Configure options button
-        rightButton = (Button) findViewById(R.id.rightButton);
+        rightButton = findViewById(R.id.rightButton);
         rightButton.setOnClickListener(this::rightButtonHandler);
 
 
@@ -110,15 +112,17 @@ public class MainActivity extends AppCompatActivity {
         opuHelper.showOptions(view);
     }
 
+    @SuppressWarnings("all")
     public void showConfirmation(View v) {
         View popupView = inflater.inflate(R.layout.confirm_changes, null);
         PopupWindow popupWindow = createPopup(popupView, 400, 500);
 
-        TextView changesText = (TextView) popupView.findViewById(R.id.changesText);
+        TextView changesText = popupView.findViewById(R.id.changesText);
+        Collections.sort(changes, (c1, c2) -> c1.toString().compareTo(c2.toString()));
         changesText.setText(printList(changes));
         changesText.setMovementMethod(new ScrollingMovementMethod());
 
-        Button confirmButton = (Button) popupView.findViewById(R.id.confirmButton);
+        Button confirmButton = popupView.findViewById(R.id.confirmButton);
         confirmButton.setOnClickListener(view -> {
             applyChanges();
             login = null;
@@ -134,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         View popupView = inflater.inflate(R.layout.log, null);
         PopupWindow popupWindow = createPopup(popupView, -2, -2);
 
-        TextView logText = (TextView) popupView.findViewById(R.id.logText);
+        TextView logText = popupView.findViewById(R.id.logText);
         logText.setText(printList(mDbHelper.getLog()));
         logText.setMovementMethod(new ScrollingMovementMethod());
 
@@ -145,43 +149,15 @@ public class MainActivity extends AppCompatActivity {
         View popupView = inflater.inflate(R.layout.check_balance, null);
         PopupWindow popupWindow = createPopup(popupView, 700, 600);
 
-        TextView balanceTotal = (TextView) popupView.findViewById(R.id.balanceTotal);
+        TextView balanceTotal = popupView.findViewById(R.id.balanceTotal);
         int balance = login.getBalance();
         double inEuros = Math.round(balance * 0.7 * 100.0) / 100.0;
         String text = balance + " = " + inEuros + '€';
         balanceTotal.setText(text);
 
-        TextView balanceHistory = (TextView) popupView.findViewById(R.id.balanceHistory);
+        TextView balanceHistory = popupView.findViewById(R.id.balanceHistory);
         balanceHistory.setText(printList(mDbHelper.findLogByName(login.createShortName())));
         balanceHistory.setMovementMethod(new ScrollingMovementMethod());
-
-        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-    }
-
-    public void showCreateUser(View v) {
-        View popupView = inflater.inflate(R.layout.create_user, null);
-        PopupWindow popupWindow = createPopup(popupView, 750, 600);
-
-        EditText firstNameInput = (EditText) popupView.findViewById(R.id.firstNameInput);
-        EditText lastNameInput = (EditText) popupView.findViewById(R.id.lastNameInput);
-        EditText pinCodeInput = (EditText) popupView.findViewById(R.id.pinCodeInput);
-        RadioGroup groupSelect = (RadioGroup ) popupView.findViewById(R.id.groupSelect);
-
-        Button confirmButton = (Button) popupView.findViewById(R.id.confirmationButton);
-        confirmButton.setOnClickListener(view -> {
-            //TODO: input validation
-            String firstName = firstNameInput.getText().toString();
-            String lastName = lastNameInput.getText().toString();
-            int pincode = Integer.parseInt(pinCodeInput.getText().toString());
-            int buttonId = groupSelect.getCheckedRadioButtonId();
-            RadioButton button = (RadioButton) popupView.findViewById(buttonId);
-            String group = button.getText().toString();
-            User newUser = new User(firstName, lastName, group, pincode);
-            mDbHelper.insertUser(newUser);
-            mDbHelper.insertLog(login.createShortName(), newUser.createShortName(), "creation", 0);
-            finish();
-            startActivity(getIntent());
-        });
 
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
     }
@@ -211,15 +187,6 @@ public class MainActivity extends AppCompatActivity {
         changes.clear();
     }
 
-    public boolean verifyPinCode(String pincode) {
-        if (Integer.parseInt(pincode) == login.getPinCode()) {
-            verified = true;
-            updateScreen();
-            return true;
-        }
-        return false;
-    }
-
     public void updateScreen() {
         if (verified) {
             String fullName = login.getFirstName() + " " + login.getLastName();
@@ -237,23 +204,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //Can be deleted when the app is finished
-    public void startDatabase() {
-        mDbHelper.emptyDb();
-        // Creates users
-        User vic = new User(0,"Vic", "Vansteelant", "Verkenners", "admin", 10, 1111);
-        User jannes = new User(0, "Jannes", "Dekeyzer", "Kapoenen", "mod", 5, 2222);
-        User bavo = new User(0, "Bavo", "Dewaele", "Jins", "regular", 100, 3333);
-
-        // Inserts the users in the database
-        mDbHelper.insertUser(vic);
-        mDbHelper.insertUser(jannes);
-        for(int i = 0; i < 10; i++ ) {
-            mDbHelper.insertUser(bavo);
-        }
-        finish();
-        startActivity(getIntent());
-    }
+    public CreateUserPopUpHelper getCupuHelper() {return cupuHelper;}
 
     public DatabaseHelper getMdbHelper() {
         return mDbHelper;
@@ -269,6 +220,10 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean isVerified() {
         return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 
     public List<User> getUsers() {

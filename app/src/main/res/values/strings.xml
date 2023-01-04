@@ -27,8 +27,12 @@
     <string name="group3">Jongverkenners</string>
     <string name="group4">Verkenners</string>
     <string name="group5">Jins</string>
-    <string name="group6">Ex leaders</string>
+    <string name="group6">Ex-leaders</string>
     <string name="group7">Other</string>
+    <string name="empty_field">Please fill in this field!</string>
+    <string name="name_uppercase">Please start the name with uppercase!</string>
+    <string name="pincode_length">Enter a pincode between 2 and 6 characters!</string>
+    <string name="invalid_number">Please enter a number!</string>
 
     <!-- log -->
     <string name="addition">added to</string>

@@ -172,4 +172,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Collections.reverse(log);
         return log;
     }
+
+
+    //Can be deleted when the app is finished
+    public void startDatabase() {
+        emptyDb();
+        // Creates users
+        User vic = new User(0,"Vic", "Vansteelant", "Verkenners", "admin", 10, 1111);
+        User jannes = new User(0, "Jannes", "Dekeyzer", "Kapoenen", "mod", 5, 2222);
+        User bavo = new User(0, "Bavo", "Dewaele", "Jins", "regular", 100, 3333);
+
+        // Inserts the users in the database
+        insertUser(vic);
+        insertUser(jannes);
+        for(int i = 0; i < 10; i++ ) {
+            insertUser(bavo);
+        }
+        app.finish();
+        app.startActivity(app.getIntent());
+    }
+
 }
