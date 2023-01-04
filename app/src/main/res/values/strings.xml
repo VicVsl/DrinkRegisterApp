@@ -3,6 +3,7 @@
     <string name="app_name">Drink Register App</string>
     <string name="app_organization" translatable="false">Scouts Gits</string>
     <string name="confirm">Confirm</string>
+    <string name="edit_mode">Edit Mode</string>
 
     <!-- check_balance -->
     <string name="balance_title">Balance</string>
@@ -26,10 +27,26 @@
     <string name="name_uppercase">Please start the name with uppercase!</string>
     <string name="pincode_length">Enter a pincode between 2 and 6 characters!</string>
     <string name="invalid_number">Please enter a number!</string>
+    <string name="user_exists">This user already exists!</string>
+
+    <!-- edit_menu -->
+    <string name="edit_menu_header">Edit Menu</string>
+    <string name="edit_balance">Edit balance</string>
+    <string name="change_balance">Amount</string>
+    <string name="edit_pincode">Edit pincode</string>
+    <string name="edit_group">Edit group</string>
+    <string name="delete_user">Delete User</string>
+    <string name="delete_user_text1">Are you sure you want to delete</string>
+    <string name="delete_user_text2">\?</string>
+    <string name="edit_rank">Edit rank</string>
+    <string name="regular" translatable="false">regular</string>
+    <string name="mod" translatable="false">mod</string>
+    <string name="admin" translatable="false">admin</string>
 
     <!-- log -->
     <string name="addition">added to</string>
     <string name="creation">created user</string>
+    <string name="deletion">deleted from</string>
     <string name="error">Something went wrong!</string>
 
     <!-- main_screen -->
@@ -51,6 +68,7 @@
     <string name="change_pincode">Change pincode</string>
     <!-- mod_options -->
     <string name="create_user">Create User</string>
+    <string name="edit_user">Edit User</string>
     <!-- admin_options -->
     <string name="empty_database">Empty Database</string>
     <string name="setup_database">Setup Database</string>

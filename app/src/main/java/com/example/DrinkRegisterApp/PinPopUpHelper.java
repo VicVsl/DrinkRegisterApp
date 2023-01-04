@@ -42,7 +42,7 @@ public class PinPopUpHelper {
         Button enterButton = v.findViewById(R.id.buttonENTER);
         enterButton.setOnClickListener(view -> {
             if (update) {
-                updatePincode();
+                updatePincode(view);
                 if (!update) window.dismiss();
                 return;
             }
@@ -141,7 +141,7 @@ public class PinPopUpHelper {
         pinCodeProgress.setText(text.toString());
     }
 
-    public void updatePincode() {
+    public void updatePincode(View v) {
         if (pinCode.length() < 2 || pinCode.length() > 6) {
             pinCodeHeader.setText(app.getResources().getString(R.string.pincode_length));
             pinCodeHeader.setTextSize(45);
@@ -151,8 +151,9 @@ public class PinPopUpHelper {
             return;
         }
         int pincode = Integer.parseInt(pinCode);
-        app.getMdbHelper().updatePincode(app.getLogin().getId(), pincode);
+        app.getDbHelper().updatePincode(app.getLogin().getId(), pincode);
         update = false;
+        app.leftButtonHandler(v);
     }
 
     public void setUpdate(boolean update) {

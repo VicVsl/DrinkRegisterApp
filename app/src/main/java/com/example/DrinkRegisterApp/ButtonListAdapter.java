@@ -38,6 +38,10 @@ public class ButtonListAdapter extends RecyclerView.Adapter<ButtonListAdapter.Bu
         // Configures the addition of balance
         holder.button.setOnClickListener(view -> {
             if (app.isVerified()) {
+                if (app.isEditMode()) {
+                    app.getEupuHelper().showEditMenu(view, user);
+                    return;
+                }
                 Change change = new Change(user.getFirstName(), user.getLastName(), 1);
                 List<Change> changes = app.getChanges();
                 if (changes.contains(change)) {
@@ -48,7 +52,7 @@ public class ButtonListAdapter extends RecyclerView.Adapter<ButtonListAdapter.Bu
                 }
             } else {
                 if (!user.getFirstName().equals("admin")) {
-                    app.setLogin(app.getMdbHelper().findUserByName(user.getFirstName(), user.getLastName()));
+                    app.setLogin(app.getDbHelper().findUserByName(user.getFirstName(), user.getLastName()));
                 } else {
                     app.setLogin(user);
                 }

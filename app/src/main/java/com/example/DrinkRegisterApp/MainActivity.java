@@ -21,13 +21,15 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private CreateUserPopUpHelper cupuHelper;
-    private DatabaseHelper mDbHelper;
+    private EditUserPopUpHelper eupuHelper;
+    private DatabaseHelper dbHelper;
     private OptionsPopUpHelper opuHelper;
     private PinPopUpHelper ppuHelper;
 
     private LayoutInflater inflater;
 
     private boolean verified;
+    private boolean editMode;
     private User login;
     private List<User> users;
     private List<Change> changes;
@@ -43,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_screen);
 
         cupuHelper = new CreateUserPopUpHelper(this);
-        mDbHelper = new DatabaseHelper(this);
+        eupuHelper = new EditUserPopUpHelper(this);
+        dbHelper = new DatabaseHelper(this);
         opuHelper = new OptionsPopUpHelper(this);
         ppuHelper = new PinPopUpHelper(this);
 
@@ -54,11 +57,11 @@ public class MainActivity extends AppCompatActivity {
         changes = new ArrayList<>();
 
         // Makes sure users isn't 0
-        users = mDbHelper.getUsers();
+        users = dbHelper.getUsers();
         if (users.isEmpty()) {
             User admin = new User(0,"admin", "temp", "other", "admin", 100, 0);
             users.add(admin);
-            mDbHelper.insertUser(admin);
+            dbHelper.insertUser(admin);
         }
         Collections.sort(users, (u1, u2) -> u1.createShortName().compareTo(u2.createShortName()));
 
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        mDbHelper.close();
+        dbHelper.close();
         super.onDestroy();
     }
 
@@ -95,9 +98,11 @@ public class MainActivity extends AppCompatActivity {
             finish();
             System.exit(0);
         }
-        if (changes.isEmpty()) {
+        if (changes.isEmpty() || editMode) {
             login = null;
+            changes.clear();
             verified = false;
+            editMode = false;
             updateScreen();
             return;
         }
@@ -139,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         PopupWindow popupWindow = createPopup(popupView, -2, -2);
 
         TextView logText = popupView.findViewById(R.id.logText);
-        logText.setText(printList(mDbHelper.getLog()));
+        logText.setText(printList(dbHelper.getLog()));
         logText.setMovementMethod(new ScrollingMovementMethod());
 
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
@@ -156,10 +161,19 @@ public class MainActivity extends AppCompatActivity {
         balanceTotal.setText(text);
 
         TextView balanceHistory = popupView.findViewById(R.id.balanceHistory);
-        balanceHistory.setText(printList(mDbHelper.findLogByName(login.createShortName())));
+        balanceHistory.setText(printList(dbHelper.findLogByName(login.createShortName())));
         balanceHistory.setMovementMethod(new ScrollingMovementMethod());
 
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+    }
+
+    public void enableEditMode() {
+        editMode = true;
+        loginLabel.setText(R.string.edit_mode);
+        loginLabel.setTextColor(getResources().getColor(R.color.red));
+        leftButton.setText(R.string.exit);
+        leftButton.setTextSize(30);
+        rightButton.setVisibility(View.GONE);
     }
 
     @SuppressWarnings("rawtypes")
@@ -179,10 +193,10 @@ public class MainActivity extends AppCompatActivity {
     public void applyChanges() {
         for (int i = 0; i < changes.size(); i++) {
             Change change = changes.get(i);
-            User user = mDbHelper.findUserByName(change.getFirstName(), change.getLastName());
+            User user = dbHelper.findUserByName(change.getFirstName(), change.getLastName());
             user.addBalance(change.getAmount());
-            mDbHelper.updateBalance(user);
-            mDbHelper.insertLog(login.createShortName(), user.createShortName(), "addition", change.getAmount());
+            dbHelper.updateBalance(user);
+            dbHelper.insertLog(login.createShortName(), user.createShortName(), "addition", change.getAmount());
         }
         changes.clear();
     }
@@ -197,18 +211,22 @@ public class MainActivity extends AppCompatActivity {
             rightButton.setTextSize(20);
         } else {
             loginLabel.setText(R.string.app_organization);
+            loginLabel.setTextColor(getResources().getColor(R.color.yellow));
             leftButton.setText(R.string.exit);
             leftButton.setTextSize(30);
             rightButton.setText(R.string.log);
             rightButton.setTextSize(30);
+            rightButton.setVisibility(View.VISIBLE);
         }
     }
 
     public CreateUserPopUpHelper getCupuHelper() {return cupuHelper;}
 
-    public DatabaseHelper getMdbHelper() {
-        return mDbHelper;
+    public DatabaseHelper getDbHelper() {
+        return dbHelper;
     }
+
+    public EditUserPopUpHelper getEupuHelper() {return eupuHelper;}
 
     public PinPopUpHelper getPpuHelper() {
         return ppuHelper;
@@ -224,6 +242,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void setVerified(boolean verified) {
         this.verified = verified;
+    }
+
+    public boolean isEditMode() {
+        return editMode;
     }
 
     public List<User> getUsers() {

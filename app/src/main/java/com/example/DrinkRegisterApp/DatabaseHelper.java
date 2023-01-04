@@ -83,6 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         String sql = "SELECT * FROM users WHERE first_name='" + fName + "' AND  last_name='" + lName + "'";
         Cursor cursor = db.rawQuery(sql, null);
+        if (cursor.getCount()== 0) return null;
 
         cursor.moveToNext();
         int id = cursor.getInt(0);
@@ -96,6 +97,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cursor.close();
         return user;
+    }
+
+    public void updateGroup(int id, String group) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("group_", group);
+        String[] selectionArgs = {id + ""};
+
+        db.update("users", values, "id LIKE ?", selectionArgs);
+    }
+
+    public void updateRank(int id, String rank) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("rank", rank);
+        String[] selectionArgs = {id + ""};
+
+        db.update("users", values, "id LIKE ?", selectionArgs);
     }
 
     public void updateBalance(User user) {
@@ -116,14 +135,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update("users", values, "id LIKE ?", selectionArgs);
     }
 
-//    public void updateRank(User user) {
-//        SQLiteDatabase db = getWritableDatabase();
-//        ContentValues values = new ContentValues();
-//        values.put("rank", user.getRank());
-//        String[] selectionArgs = {user.getId() + ""};
-//
-//        db.update("users", values, "id LIKE ?", selectionArgs);
-//    }
+    public void deleteUser(int id) {
+        SQLiteDatabase db = getWritableDatabase();
+        String sql = "DELETE FROM users WHERE id=" + id;
+        db.execSQL(sql);
+    }
 
     //------------------------- Handles logs ---------------------------------------//
 
@@ -155,6 +171,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     actionText = " " + app.getResources().getString(R.string.creation) + " ";
                     logLine = '\n' + cursor.getString(1) + actionText + cursor.getString(2);
                     break;
+                case "deletion":
+                    actionText = " " + app.getResources().getString(R.string.deletion) + " ";
+                    logLine = '\n' + cursor.getString(1) + actionText + cursor.getString(2) + " : " + cursor.getInt(4);
+                    break;
                 default:
                     logLine = app.getResources().getString(R.string.error);
                     break;
@@ -168,13 +188,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<String> findLogByName(String name) {
         SQLiteDatabase db = getReadableDatabase();
-        String sql = "SELECT * FROM log WHERE user_2='" + name + "' AND  action_='addition'";
+        String sql = "SELECT * FROM log WHERE user_2='" + name + "' AND  action_='addition' OR action_='deletion'";
         Cursor cursor = db.rawQuery(sql, null);
 
         List<String> log = new ArrayList<>();
         while (cursor.moveToNext()) {
-            String actionText = " " + app.getResources().getString(R.string.addition) + " ";
-            String logLine = '\n' + cursor.getString(1) + actionText + cursor.getString(2) + " : " + cursor.getInt(4);
+            String logLine;
+            String actionText;
+            switch (cursor.getString(3)) {
+                case "addition":
+                    actionText = " " + app.getResources().getString(R.string.addition) + " ";
+                    logLine = '\n' + cursor.getString(1) + actionText + cursor.getString(2) + " : " + cursor.getInt(4);
+                    break;
+                case "deletion":
+                    actionText = " " + app.getResources().getString(R.string.deletion) + " ";
+                    logLine = '\n' + cursor.getString(1) + actionText + cursor.getString(2) + " : " + cursor.getInt(4);
+                    break;
+                default:
+                    logLine = app.getResources().getString(R.string.error);
+                    break;
+            }
             log.add(logLine);
         }
         cursor.close();

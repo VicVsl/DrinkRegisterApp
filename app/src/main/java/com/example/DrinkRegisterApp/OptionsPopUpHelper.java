@@ -5,11 +5,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 @SuppressLint("InflateParams")
 public class OptionsPopUpHelper {
 
     private final MainActivity app;
+    private int counter;
 
     public OptionsPopUpHelper(MainActivity app) {
         this.app = app;
@@ -53,32 +55,6 @@ public class OptionsPopUpHelper {
 
     public void showModOptions(View v) {
         View popupView = app.getInflater().inflate(R.layout.mod_options, null);
-        PopupWindow popupWindow = app.createPopup(popupView, 500, 520);
-
-        Button checkBalanceButton = popupView.findViewById(R.id.checkBalanceButton);
-        checkBalanceButton.setOnClickListener(view -> {
-            popupWindow.dismiss();
-            app.showBalance(view);
-        });
-
-        Button changePincodeButton = popupView.findViewById(R.id.changePincodeButton);
-        changePincodeButton.setOnClickListener(view -> {
-            popupWindow.dismiss();
-            app.getPpuHelper().setUpdate(true);
-            app.getPpuHelper().showPincode(view);
-        });
-
-        Button createUserButton = popupView.findViewById(R.id.createUserButton);
-        createUserButton.setOnClickListener(view -> {
-            popupWindow.dismiss();
-            app.getCupuHelper().showCreateUser(view);
-        });
-
-        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-    }
-
-    public void showAdminOptions(View v) {
-        View popupView = app.getInflater().inflate(R.layout.admin_options, null);
         PopupWindow popupWindow = app.createPopup(popupView, 500, 650);
 
         Button checkBalanceButton = popupView.findViewById(R.id.checkBalanceButton);
@@ -100,8 +76,52 @@ public class OptionsPopUpHelper {
             app.getCupuHelper().showCreateUser(view);
         });
 
-        Button setupDatabaseButton = popupView.findViewById(R.id.setupDatabaseButton);
-        setupDatabaseButton.setOnClickListener(view -> app.getMdbHelper().startDatabase());
+        Button editUserButton = popupView.findViewById(R.id.editUserButton);
+        editUserButton.setOnClickListener(view -> {
+            popupWindow.dismiss();
+            app.enableEditMode();
+        });
+
+        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+    }
+
+    public void showAdminOptions(View v) {
+        View popupView = app.getInflater().inflate(R.layout.mod_options, null);
+        PopupWindow popupWindow = app.createPopup(popupView, 500, 650);
+
+        Button checkBalanceButton = popupView.findViewById(R.id.checkBalanceButton);
+        checkBalanceButton.setOnClickListener(view -> {
+            popupWindow.dismiss();
+            app.showBalance(view);
+        });
+
+        Button changePincodeButton = popupView.findViewById(R.id.changePincodeButton);
+        changePincodeButton.setOnClickListener(view -> {
+            popupWindow.dismiss();
+            app.getPpuHelper().setUpdate(true);
+            app.getPpuHelper().showPincode(view);
+        });
+
+        Button createUserButton = popupView.findViewById(R.id.createUserButton);
+        createUserButton.setOnClickListener(view -> {
+            popupWindow.dismiss();
+            app.getCupuHelper().showCreateUser(view);
+        });
+
+        Button editUserButton = popupView.findViewById(R.id.editUserButton);
+        editUserButton.setOnClickListener(view -> {
+            popupWindow.dismiss();
+            app.enableEditMode();
+        });
+
+        TextView optionsHeader = popupView.findViewById(R.id.optionsTitle);
+        optionsHeader.setOnClickListener(view -> {
+            counter++;
+            if (counter == 5) {
+                counter = 0;
+                app.getDbHelper().startDatabase();
+            }
+        });
 
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
     }

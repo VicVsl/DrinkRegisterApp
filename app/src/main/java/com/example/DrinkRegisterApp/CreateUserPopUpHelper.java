@@ -53,15 +53,21 @@ public class CreateUserPopUpHelper {
         if (!(firstNameInput.getError() == null) || !(lastNameInput.getError() == null) || !(pinCodeInput.getError() == null))
             return;
 
+        if (app.getDbHelper().findUserByName(firstName, lastName) != null) {
+            firstNameInput.setError(app.getResources().getString(R.string.user_exists));
+            lastNameInput.setError(app.getResources().getString(R.string.user_exists));
+            return;
+        }
+
         RadioGroup groupSelect = v.findViewById(R.id.groupSelect);
         RadioButton button = v.findViewById(groupSelect.getCheckedRadioButtonId());
         String group = button.getText().toString();
-        if (group.equals("Oud-leiding")) group = "Ex-leaders";
-        if (group.equals("Andere")) group = "Other";
+        if (group.equals(app.getResources().getString(R.string.group6))) group = "Ex-leaders";
+        if (group.equals(app.getResources().getString(R.string.group7))) group = "Other";
 
         User newUser = new User(firstName, lastName, group, pincode);
-        app.getMdbHelper().insertUser(newUser);
-        app.getMdbHelper().insertLog(app.getLogin().createShortName(), newUser.createShortName(), "creation", 0);
+        app.getDbHelper().insertUser(newUser);
+        app.getDbHelper().insertLog(app.getLogin().createShortName(), newUser.createShortName(), "creation", 0);
         app.finish();
         app.startActivity(app.getIntent());
     }
