@@ -4,7 +4,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,6 +46,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         app.finish();
         app.startActivity(app.getIntent());
     }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public void exportDB() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM users", null);
+
+        CSVWriter csvWrite;
+        try {
+            File exportDir = new File(Environment.getExternalStorageDirectory(), "/backup");
+            if (!exportDir.exists()) {
+                exportDir.mkdirs();
+            }
+            File file = new File(exportDir, "backup.csv");
+            file.createNewFile();
+            csvWrite = new CSVWriter(new FileWriter(file));
+        } catch (Exception e) {
+            return;
+        }
+        String firstName = app.getResources().getString(R.string.first_name);
+        String lastName = app.getResources().getString(R.string.last_name);
+        String balance = app.getResources().getString(R.string.balance_title);
+        csvWrite.writeNext(new String[]{firstName, lastName, balance});
+        while (cursor.moveToNext()) {
+            String[] rowData = {cursor.getString(1), cursor.getString(2), cursor.getString(5)};
+            csvWrite.writeNext(rowData);
+        }
+        csvWrite.close();
+        cursor.close();
+    }
+
+
 
     //------------------------- Handles users ---------------------------------------//
 
@@ -145,6 +179,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] selectionArgs = {user.getId() + ""};
 
         db.update("users", values, "id LIKE ?", selectionArgs);
+        exportDB();
     }
 
     public void updatePincode(int id, int pincode) {
