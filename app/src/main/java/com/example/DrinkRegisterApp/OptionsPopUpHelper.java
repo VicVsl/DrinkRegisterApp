@@ -153,7 +153,7 @@ public class OptionsPopUpHelper {
                 app.getDbHelper().updateBalance(user);
                 app.getDbHelper().insertLog(app.getLogin().createShortName(), user.createShortName(), "deletion", balance);
             }
-            app.leftButtonHandler(view);
+            app.leftButtonHandler(null);
         });
 
         Button printDatabaseButton = popupView.findViewById(R.id.printDatabaseButton);

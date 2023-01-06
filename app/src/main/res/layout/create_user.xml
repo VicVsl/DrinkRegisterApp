@@ -170,4 +170,34 @@
             android:textStyle="bold" />
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/firstNameError"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/red"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/firstNameInput"
+        app:layout_constraintTop_toBottomOf="@+id/firstNameInput" />
+
+    <TextView
+        android:id="@+id/lastNameError"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/red"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/lastNameInput"
+        app:layout_constraintTop_toBottomOf="@+id/lastNameInput" />
+
+    <TextView
+        android:id="@+id/pinCodeError"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/red"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/pinCodeInput"
+        app:layout_constraintTop_toBottomOf="@+id/pinCodeInput" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

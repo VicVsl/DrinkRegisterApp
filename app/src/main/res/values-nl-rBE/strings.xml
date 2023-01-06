@@ -4,6 +4,7 @@
     <string name="app_name">Streepjes App</string>
     <string name="confirm">Bevestigen</string>
     <string name="edit_mode">Bewerkings stand</string>
+    <string name="no_permission">Je hebt geen permissie om dit te doen!</string>
 
     <!-- check_balance -->
     <string name="balance_title">Onkosten</string>

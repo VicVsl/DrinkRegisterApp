@@ -10,6 +10,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 @SuppressLint("InflateParams")
 public class EditUserPopUpHelper {
 
@@ -36,10 +38,15 @@ public class EditUserPopUpHelper {
         Button editPincodeButton = popupView.findViewById(R.id.editPincodeButton);
         editPincodeButton.setOnClickListener(view -> {
             popupWindow.dismiss();
-            app.setLogin(user);
+            if (user.getRank().equals("admin") && !app.getLogin().getRank().equals("admin")) {
+                app.showSnackbar(v, app.getResources().getString(R.string.no_permission));
+                return;
+            }
             app.getPpuHelper().setUpdate(true);
             app.getPpuHelper().showPincode(view);
+            app.getPpuHelper().setLogin(user);
         });
+
 
         Button editGroupButton = popupView.findViewById(R.id.editGroupButton);
         editGroupButton.setOnClickListener(view -> {
@@ -50,6 +57,10 @@ public class EditUserPopUpHelper {
         Button deleteUserButton = popupView.findViewById(R.id.deleteUserButton);
         deleteUserButton.setOnClickListener(view -> {
             popupWindow.dismiss();
+            if (user.getRank().equals("admin") && !app.getLogin().getRank().equals("admin")) {
+                app.showSnackbar(v, app.getResources().getString(R.string.no_permission));
+                return;
+            }
             showDeleteUserMenu(view);
         });
 
@@ -82,6 +93,9 @@ public class EditUserPopUpHelper {
             } catch (Exception e) {
                 balanceInput.setError(app.getResources().getString(R.string.invalid_number));
                 return;
+            }
+            if (amount > user.getBalance()) {
+                amount = user.getBalance();
             }
             user.updateBalance(-amount);
             app.getDbHelper().updateBalance(user);

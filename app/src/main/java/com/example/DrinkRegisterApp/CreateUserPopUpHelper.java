@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 public class CreateUserPopUpHelper {
 
@@ -31,32 +32,37 @@ public class CreateUserPopUpHelper {
 
     public void validateUser(View v) {
         EditText firstNameInput = v.findViewById(R.id.firstNameInput);
+        TextView firstNameError = v.findViewById(R.id.firstNameError);
+        firstNameError.setText(null);
         String firstName = firstNameInput.getText().toString();
-        if (firstName.isEmpty()) firstNameInput.setError(app.getResources().getString(R.string.empty_field));
-        else if (!Character.isUpperCase(firstName.charAt(0))) firstNameInput.setError(app.getResources().getString(R.string.name_uppercase));
+        if (firstName.isEmpty()) firstNameError.setText(app.getResources().getString(R.string.empty_field));
+        else if (!Character.isUpperCase(firstName.charAt(0))) firstNameError.setText(app.getResources().getString(R.string.name_uppercase));
 
         EditText lastNameInput = v.findViewById(R.id.lastNameInput);
+        TextView lastNameError = v.findViewById(R.id.lastNameError);
+        lastNameError.setText(null);
         String lastName = lastNameInput.getText().toString();
-        if (lastName.isEmpty()) lastNameInput.setError(app.getResources().getString(R.string.empty_field));
-        else if (!Character.isUpperCase(lastName.charAt(0))) lastNameInput.setError(app.getResources().getString(R.string.name_uppercase));
+        if (lastName.isEmpty()) lastNameError.setText(app.getResources().getString(R.string.empty_field));
+        else if (!Character.isUpperCase(lastName.charAt(0))) lastNameError.setText(app.getResources().getString(R.string.name_uppercase));
 
         EditText pinCodeInput = v.findViewById(R.id.pinCodeInput);
+        TextView pinCodeError = v.findViewById(R.id.pinCodeError);
+        pinCodeError.setText(null);
         int pincode = 0;
         String pincodeText = pinCodeInput.getText().toString();
-        if (pincodeText.isEmpty()) pinCodeInput.setError(app.getResources().getString(R.string.empty_field));
+        if (pincodeText.isEmpty()) pinCodeError.setText(app.getResources().getString(R.string.empty_field));
         else if (pincodeText.length() < 2 || pincodeText.length() > 6)
-            pinCodeInput.setError(app.getResources().getString(R.string.pincode_length));
+            pinCodeError.setText(app.getResources().getString(R.string.pincode_length));
         else try {
             pincode = Integer.parseInt(pincodeText);
         } catch (Exception e) {
-            pinCodeInput.setError(app.getResources().getString(R.string.invalid_number));
+            pinCodeError.setText(app.getResources().getString(R.string.invalid_number));
         }
-        if (!(firstNameInput.getError() == null) || !(lastNameInput.getError() == null) || !(pinCodeInput.getError() == null))
+        if (!(firstNameError.getText().equals("")) || !(lastNameError.getText().equals("")) || !(pinCodeError.getText().equals("")))
             return;
 
         if (app.getDbHelper().findUserByName(firstName, lastName) != null) {
-            firstNameInput.setError(app.getResources().getString(R.string.user_exists));
-            lastNameInput.setError(app.getResources().getString(R.string.user_exists));
+            firstNameError.setText(app.getResources().getString(R.string.user_exists));
             return;
         }
 

@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private PinPopUpHelper ppuHelper;
 
     private Activity activity;
+    private int counter;
     private LayoutInflater inflater;
     private Timer timer;
     private TimerTask autoLogOut;
@@ -72,13 +75,15 @@ public class MainActivity extends AppCompatActivity {
         // Makes sure users isn't 0
         users = dbHelper.getUsers();
         if (users.isEmpty()) {
-            User admin = new User(0,"admin", "temp", "other", "admin", 100, 0);
-            users.add(admin);
-            dbHelper.insertUser(admin);
+            counter = 20;
+            createAdmin();
         }
         Collections.sort(users, (u1, u2) -> u1.createShortName().compareTo(u2.createShortName()));
 
         loginLabel = findViewById(R.id.loginLabel);
+        loginLabel.setOnClickListener(view -> {
+            createAdmin();
+        });
 
         // Configure exit button
         leftButton = findViewById(R.id.leftButton);
@@ -211,6 +216,14 @@ public class MainActivity extends AppCompatActivity {
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
     }
 
+    public void showSnackbar(View v, String text) {
+        Snackbar snackbar = Snackbar
+                .make(v, text, Snackbar.LENGTH_LONG);
+        snackbar.setBackgroundTint(getResources().getColor(R.color.dark_blue));
+        snackbar.setTextColor(getResources().getColor(R.color.yellow));
+        snackbar.show();
+    }
+
     public void enableEditMode() {
         editMode = true;
         loginLabel.setText(R.string.edit_mode);
@@ -248,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateScreen() {
+        counter = 0;
         if (verified) {
             String fullName = login.getFirstName() + " " + login.getLastName();
             loginLabel.setText(fullName);
@@ -296,6 +310,15 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         timer.schedule(autoLogOut, delay * 60000);
+    }
+
+    public void createAdmin() {
+        counter++;
+        if (counter < 20) return;
+        counter = 0;
+        User admin = new User(0,"Admin", "Admin", "other", "admin", 0, 0);
+        users.add(admin);
+        dbHelper.insertUser(admin);
     }
 
     public CreateUserPopUpHelper getCupuHelper() {return cupuHelper;}

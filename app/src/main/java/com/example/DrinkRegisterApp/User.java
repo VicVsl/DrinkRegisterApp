@@ -35,9 +35,6 @@ public class User {
     }
 
     public void updateBalance(int change) {
-        if (change > balance) {
-            change = balance;
-        }
         this.balance += change;
     }
 

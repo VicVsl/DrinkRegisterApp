@@ -11,10 +11,12 @@ public class PinPopUpHelper {
 
     private final MainActivity app;
 
+    private User login;
     private String pinCode;
+    private boolean update;
+
     private TextView pinCodeHeader;
     private TextView pinCodeProgress;
-    private boolean update;
 
     public PinPopUpHelper(MainActivity app) {
         this.app = app;
@@ -33,6 +35,7 @@ public class PinPopUpHelper {
 
     public void setupPinButtons(View v, PopupWindow window) {
         pinCode = "";
+        login = app.getLogin();
 
         pinCodeHeader = v.findViewById(R.id.pinCodeHeader);
         if (update) pinCodeHeader.setText(app.getResources().getString(R.string.update_pincode));
@@ -43,7 +46,7 @@ public class PinPopUpHelper {
         Button enterButton = v.findViewById(R.id.buttonENTER);
         enterButton.setOnClickListener(view -> {
             if (update) {
-                updatePincode(view);
+                updatePincode();
                 if (!update) window.dismiss();
                 return;
             }
@@ -126,7 +129,7 @@ public class PinPopUpHelper {
     }
 
     public boolean verifyPinCode(String pincode) {
-        if (Integer.parseInt(pincode) == app.getLogin().getPinCode()) {
+        if (Integer.parseInt(pincode) == login.getPinCode()) {
             app.setVerified(true);
             app.updateScreen();
             return true;
@@ -142,7 +145,7 @@ public class PinPopUpHelper {
         pinCodeProgress.setText(text.toString());
     }
 
-    public void updatePincode(View v) {
+    public void updatePincode() {
         if (pinCode.length() < 2 || pinCode.length() > 6) {
             pinCodeHeader.setText(app.getResources().getString(R.string.pincode_length));
             pinCodeHeader.setTextSize(45);
@@ -154,10 +157,14 @@ public class PinPopUpHelper {
         int pincode = Integer.parseInt(pinCode);
         app.getDbHelper().updatePincode(app.getLogin().getId(), pincode);
         update = false;
-        app.leftButtonHandler(v);
+        app.leftButtonHandler(null);
     }
 
     public void setUpdate(boolean update) {
         this.update = update;
+    }
+
+    public void setLogin(User login) {
+        this.login = login;
     }
 }

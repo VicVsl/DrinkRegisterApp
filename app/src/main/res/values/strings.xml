@@ -4,6 +4,7 @@
     <string name="app_organization" translatable="false">Scouts Gits</string>
     <string name="confirm">Confirm</string>
     <string name="edit_mode">Edit Mode</string>
+    <string name="no_permission">You don\'t have permission to do this!</string>
 
     <!-- check_balance -->
     <string name="balance_title">Balance</string>
