@@ -21,10 +21,11 @@ public class EditUserPopUpHelper {
     }
 
     public void showEditMenu(View v, User user) {
-        this.user = user;
+        this.user = app.getDbHelper().findUserByName(user.getFirstName(), user.getLastName());
 
         View popupView = app.getInflater().inflate(R.layout.edit_menu, null);
         PopupWindow popupWindow = app.createPopup(popupView, 500, 650);
+        app.startAutoLogOutTimer(3, popupWindow);
 
         Button editBalanceButton = popupView.findViewById(R.id.editBalanceButton);
         editBalanceButton.setOnClickListener(view -> {
@@ -66,6 +67,7 @@ public class EditUserPopUpHelper {
     public void showEditBalanceMenu(View v) {
         View popupView = app.getInflater().inflate(R.layout.edit_balance_menu, null);
         PopupWindow popupWindow = app.createPopup(popupView, 400, 400);
+        app.startAutoLogOutTimer(3, popupWindow);
 
         Button confirmationButton = popupView.findViewById(R.id.confirmationButton);
         confirmationButton.setOnClickListener(view -> {
@@ -81,10 +83,7 @@ public class EditUserPopUpHelper {
                 balanceInput.setError(app.getResources().getString(R.string.invalid_number));
                 return;
             }
-            if (amount > user.getBalance()) {
-                amount = user.getBalance();
-            }
-            user.addBalance(-amount);
+            user.updateBalance(-amount);
             app.getDbHelper().updateBalance(user);
             app.getDbHelper().insertLog(app.getLogin().createShortName(), user.createShortName(), "deletion", amount);
             popupWindow.dismiss();
@@ -96,6 +95,7 @@ public class EditUserPopUpHelper {
     public void showEditGroupMenu(View v) {
         View popupView = app.getInflater().inflate(R.layout.edit_group_menu, null);
         PopupWindow popupWindow = app.createPopup(popupView, 400, 600);
+        app.startAutoLogOutTimer(3, popupWindow);
 
         Button confirmationButton = popupView.findViewById(R.id.confirmationButton);
         confirmationButton.setOnClickListener(view -> {
@@ -116,6 +116,7 @@ public class EditUserPopUpHelper {
     public void showDeleteUserMenu(View v) {
         View popupView = app.getInflater().inflate(R.layout.delete_user_confirmation, null);
         PopupWindow popupWindow = app.createPopup(popupView, 500, 300);
+        app.startAutoLogOutTimer(3, popupWindow);
 
         TextView deleteUserText = popupView.findViewById(R.id.deleteUserText);
         String text1 = app.getResources().getString(R.string.delete_user_text1);
@@ -136,6 +137,7 @@ public class EditUserPopUpHelper {
     public void showEditRankMenu(View v) {
         View popupView = app.getInflater().inflate(R.layout.edit_rank_menu, null);
         PopupWindow popupWindow = app.createPopup(popupView, 400, 450);
+        app.startAutoLogOutTimer(3, popupWindow);
 
         Button confirmationButton = popupView.findViewById(R.id.confirmationButton);
         confirmationButton.setOnClickListener(view -> {

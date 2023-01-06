@@ -1,6 +1,7 @@
 package com.example.DrinkRegisterApp;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -16,8 +17,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @SuppressLint("InflateParams")
 public class MainActivity extends AppCompatActivity {
@@ -28,7 +33,10 @@ public class MainActivity extends AppCompatActivity {
     private OptionsPopUpHelper opuHelper;
     private PinPopUpHelper ppuHelper;
 
+    private Activity activity;
     private LayoutInflater inflater;
+    private Timer timer;
+    private TimerTask autoLogOut;
 
     private boolean verified;
     private boolean editMode;
@@ -52,8 +60,11 @@ public class MainActivity extends AppCompatActivity {
         opuHelper = new OptionsPopUpHelper(this);
         ppuHelper = new PinPopUpHelper(this);
 
+        activity = this;
         inflater = (LayoutInflater)
                 getSystemService(LAYOUT_INFLATER_SERVICE);
+        timer = new Timer();
+        setupAutoBackup();
 
         verified = false;
         changes = new ArrayList<>();
@@ -66,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
             dbHelper.insertUser(admin);
         }
         Collections.sort(users, (u1, u2) -> u1.createShortName().compareTo(u2.createShortName()));
-
 
         loginLabel = findViewById(R.id.loginLabel);
 
@@ -123,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
     public void showConfirmation(View v) {
         View popupView = inflater.inflate(R.layout.confirm_changes, null);
         PopupWindow popupWindow = createPopup(popupView, 400, 500);
+        startAutoLogOutTimer(2, popupWindow);
 
         TextView changesText = popupView.findViewById(R.id.changesText);
         Collections.sort(changes, (c1, c2) -> c1.toString().compareTo(c2.toString()));
@@ -144,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
     public void showLog(View v) {
         View popupView = inflater.inflate(R.layout.log, null);
         PopupWindow popupWindow = createPopup(popupView, -2, -2);
+        startAutoLogOutTimer(2, popupWindow);
 
         TextView logText = popupView.findViewById(R.id.logText);
         logText.setText(printList(dbHelper.getLog()));
@@ -155,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
     public void showBalance(View v) {
         View popupView = inflater.inflate(R.layout.check_balance, null);
         PopupWindow popupWindow = createPopup(popupView, 700, 600);
+        startAutoLogOutTimer(3, popupWindow);
 
         TextView balanceTotal = popupView.findViewById(R.id.balanceTotal);
         int balance = login.getBalance();
@@ -170,8 +183,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showAllBalances(View v) {
+        dbHelper.exportDB();
+
         View popupView = inflater.inflate(R.layout.log, null);
         PopupWindow popupWindow = createPopup(popupView, -2, -2);
+        startAutoLogOutTimer(5, popupWindow);
 
         TextView logText = popupView.findViewById(R.id.logText);
         logText.setText(printList(dbHelper.getBalances()));
@@ -182,8 +198,11 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void showDatabase(View v) {
+        dbHelper.exportDB();
+
         View popupView = inflater.inflate(R.layout.log, null);
         PopupWindow popupWindow = createPopup(popupView, -2, -2);
+        startAutoLogOutTimer(5, popupWindow);
 
         TextView logText = popupView.findViewById(R.id.logText);
         logText.setText("U" + printList(dbHelper.getUsers()));
@@ -216,13 +235,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void applyChanges() {
+        autoLogOut.cancel();
         for (int i = 0; i < changes.size(); i++) {
             Change change = changes.get(i);
             User user = dbHelper.findUserByName(change.getFirstName(), change.getLastName());
-            user.addBalance(change.getAmount());
+            user.updateBalance(change.getAmount());
             dbHelper.updateBalance(user);
             dbHelper.insertLog(login.createShortName(), user.createShortName(), "addition", change.getAmount());
         }
+        users = dbHelper.getUsers();
         changes.clear();
     }
 
@@ -234,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
             leftButton.setTextSize(20);
             rightButton.setText(R.string.options_header);
             rightButton.setTextSize(20);
+            startAutoLogOutTimer(2, null);
         } else {
             loginLabel.setText(R.string.app_organization);
             loginLabel.setTextColor(getResources().getColor(R.color.yellow));
@@ -243,6 +265,37 @@ public class MainActivity extends AppCompatActivity {
             rightButton.setTextSize(30);
             rightButton.setVisibility(View.VISIBLE);
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    public void setupAutoBackup() {
+        TimerTask createBackup = new TimerTask() {
+            @Override
+            public void run() {
+                dbHelper.exportDB();
+            }
+        };
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR) - 1900;
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        Date date = new Date(year, month, day, 23, 59, 59);
+        timer.scheduleAtFixedRate(createBackup, date, 86400000);
+    }
+
+    public void startAutoLogOutTimer(long delay, PopupWindow popupWindow) {
+        if (autoLogOut != null) autoLogOut.cancel();
+        autoLogOut = new TimerTask() {
+            @Override
+            public void run() {
+                if (popupWindow != null) activity.runOnUiThread(popupWindow::dismiss);
+                applyChanges();
+                login = null;
+                verified = false;
+                activity.runOnUiThread(() -> updateScreen());
+            }
+        };
+        timer.schedule(autoLogOut, delay * 60000);
     }
 
     public CreateUserPopUpHelper getCupuHelper() {return cupuHelper;}

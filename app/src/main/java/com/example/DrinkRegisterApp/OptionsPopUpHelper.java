@@ -38,6 +38,7 @@ public class OptionsPopUpHelper {
     public void showRegularOptions(View v) {
         View popupView = app.getInflater().inflate(R.layout.regular_options, null);
         PopupWindow popupWindow = app.createPopup(popupView, 500, 400);
+        app.startAutoLogOutTimer(3, popupWindow);
 
         Button checkBalanceButton = popupView.findViewById(R.id.checkBalanceButton);
         checkBalanceButton.setOnClickListener(view -> {
@@ -58,6 +59,7 @@ public class OptionsPopUpHelper {
     public void showModOptions(View v) {
         View popupView = app.getInflater().inflate(R.layout.mod_options, null);
         PopupWindow popupWindow = app.createPopup(popupView, 500, 650);
+        app.startAutoLogOutTimer(3, popupWindow);
 
         Button checkBalanceButton = popupView.findViewById(R.id.checkBalanceButton);
         checkBalanceButton.setOnClickListener(view -> {
@@ -90,6 +92,7 @@ public class OptionsPopUpHelper {
     public void showAdminOptions(View v) {
         View popupView = app.getInflater().inflate(R.layout.mod_options, null);
         PopupWindow popupWindow = app.createPopup(popupView, 500, 650);
+        app.startAutoLogOutTimer(3, popupWindow);
 
         Button checkBalanceButton = popupView.findViewById(R.id.checkBalanceButton);
         checkBalanceButton.setOnClickListener(view -> {
@@ -132,6 +135,7 @@ public class OptionsPopUpHelper {
     public void showAdminOptions2(View v) {
         View popupView = app.getInflater().inflate(R.layout.admin_options, null);
         PopupWindow popupWindow = app.createPopup(popupView, 500, 650);
+        app.startAutoLogOutTimer(2, popupWindow);
 
         Button getBalancesButton = popupView.findViewById(R.id.getBalancesButton);
         getBalancesButton.setOnClickListener(view -> {
@@ -145,7 +149,7 @@ public class OptionsPopUpHelper {
             List<User> users = app.getDbHelper().getUsers();
             for (User user : users) {
                 int balance = user.getBalance();
-                user.addBalance(-balance);
+                user.updateBalance(-balance);
                 app.getDbHelper().updateBalance(user);
                 app.getDbHelper().insertLog(app.getLogin().createShortName(), user.createShortName(), "deletion", balance);
             }

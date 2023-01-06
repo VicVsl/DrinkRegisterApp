@@ -24,6 +24,7 @@ public class PinPopUpHelper {
     public void showPincode(View view) {
         View popupView = app.getInflater().inflate(R.layout.pincode, null);
         PopupWindow popupWindow = app.createPopup(popupView, -2, -2);
+        app.startAutoLogOutTimer(2, popupWindow);
 
         setupPinButtons(popupView, popupWindow);
 

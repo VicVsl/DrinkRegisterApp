@@ -21,6 +21,7 @@ public class CreateUserPopUpHelper {
     public void showCreateUser(View v) {
         View popupView = app.getInflater().inflate(R.layout.create_user, null);
         PopupWindow popupWindow = app.createPopup(popupView, 750, 600);
+        app.startAutoLogOutTimer(5, popupWindow);
 
         Button confirmButton = popupView.findViewById(R.id.confirmationButton);
         confirmButton.setOnClickListener(view -> validateUser(popupView));

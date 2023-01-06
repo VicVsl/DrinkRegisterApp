@@ -179,7 +179,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] selectionArgs = {user.getId() + ""};
 
         db.update("users", values, "id LIKE ?", selectionArgs);
-        exportDB();
     }
 
     public void updatePincode(int id, int pincode) {
@@ -244,7 +243,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<String> findLogByName(String name) {
         SQLiteDatabase db = getReadableDatabase();
-        String sql = "SELECT * FROM log WHERE user_2='" + name + "' AND  action_='addition' OR action_='deletion'";
+        String sql = "SELECT * FROM log WHERE user_2='" + name + "' AND  (action_='addition' OR action_='deletion')";
         Cursor cursor = db.rawQuery(sql, null);
 
         List<String> log = new ArrayList<>();

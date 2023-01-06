@@ -50,6 +50,7 @@ public class ButtonListAdapter extends RecyclerView.Adapter<ButtonListAdapter.Bu
                 } else {
                     app.getChanges().add(change);
                 }
+                app.startAutoLogOutTimer(2, null);
             } else {
                 if (!user.getFirstName().equals("admin")) {
                     app.setLogin(app.getDbHelper().findUserByName(user.getFirstName(), user.getLastName()));

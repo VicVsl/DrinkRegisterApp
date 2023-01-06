@@ -34,8 +34,11 @@ public class User {
         this.pinCode = pinCode;
     }
 
-    public void addBalance(int addition) {
-        this.balance += addition;
+    public void updateBalance(int change) {
+        if (change > balance) {
+            change = balance;
+        }
+        this.balance += change;
     }
 
     public int getId() {
