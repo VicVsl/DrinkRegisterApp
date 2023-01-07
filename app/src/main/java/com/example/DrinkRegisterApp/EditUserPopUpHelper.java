@@ -10,8 +10,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
-
 @SuppressLint("InflateParams")
 public class EditUserPopUpHelper {
 
@@ -86,12 +84,14 @@ public class EditUserPopUpHelper {
             int amount;
             String balanceText = balanceInput.getText().toString();
             if (balanceText.isEmpty()) {
-                balanceInput.setError(app.getResources().getString(R.string.empty_field));
+                balanceInput.setHint(app.getResources().getString(R.string.empty_field));
+                balanceInput.setHintTextColor(app.getResources().getColor(R.color.red));
                 return;
             } else try {
                 amount = Integer.parseInt(balanceText);
             } catch (Exception e) {
-                balanceInput.setError(app.getResources().getString(R.string.invalid_number));
+                balanceInput.setHint(app.getResources().getString(R.string.invalid_number));
+                balanceInput.setHintTextColor(app.getResources().getColor(R.color.red));
                 return;
             }
             if (amount > user.getBalance()) {
