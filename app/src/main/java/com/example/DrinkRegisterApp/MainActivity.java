@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressWarnings("all")
     public void showConfirmation(View v) {
         View popupView = inflater.inflate(R.layout.confirm_changes, null);
-        PopupWindow popupWindow = createPopup(popupView, 400, 500);
+        PopupWindow popupWindow = createPopup(popupView, 400, 600);
         startAutoLogOutTimer(2, popupWindow);
 
         TextView changesText = popupView.findViewById(R.id.changesText);
@@ -147,11 +148,18 @@ public class MainActivity extends AppCompatActivity {
 
         Button confirmButton = popupView.findViewById(R.id.confirmButton);
         confirmButton.setOnClickListener(view -> {
+            popupWindow.dismiss();
             applyChanges();
             login = null;
             verified = false;
-            popupWindow.dismiss();
             updateScreen();
+        });
+
+        Button cancelButton = popupView.findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(view -> {
+            popupWindow.dismiss();
+            changes.clear();
+            leftButtonHandler(null);
         });
 
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
@@ -171,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showBalance(View v) {
         View popupView = inflater.inflate(R.layout.check_balance, null);
-        PopupWindow popupWindow = createPopup(popupView, 700, 600);
+        PopupWindow popupWindow = createPopup(popupView, 650, 600);
         startAutoLogOutTimer(3, popupWindow);
 
         TextView balanceTotal = popupView.findViewById(R.id.balanceTotal);
@@ -188,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showAllBalances(View v) {
-        dbHelper.exportDB();
+        dbHelper.exportDB("backup.csv");
 
         View popupView = inflater.inflate(R.layout.log, null);
         PopupWindow popupWindow = createPopup(popupView, -2, -2);
@@ -203,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void showDatabase(View v) {
-        dbHelper.exportDB();
+        dbHelper.exportDB("backup.csv");
 
         View popupView = inflater.inflate(R.layout.log, null);
         PopupWindow popupWindow = createPopup(popupView, -2, -2);
@@ -281,12 +289,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public String getDate() {
+        Calendar calendar = Calendar.getInstance();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+        return sdf.format(calendar.getTime());
+    }
+
     @SuppressWarnings("deprecation")
     public void setupAutoBackup() {
         TimerTask createBackup = new TimerTask() {
             @Override
             public void run() {
-                dbHelper.exportDB();
+                dbHelper.exportDB("backup.csv");
             }
         };
         Calendar calendar = Calendar.getInstance();

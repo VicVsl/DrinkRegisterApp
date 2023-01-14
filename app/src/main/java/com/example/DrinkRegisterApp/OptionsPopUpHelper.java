@@ -146,6 +146,7 @@ public class OptionsPopUpHelper {
         Button resetBalancesButton = popupView.findViewById(R.id.resetBalancesButton);
         resetBalancesButton.setOnClickListener(view -> {
             popupWindow.dismiss();
+            app.getDbHelper().exportDB("reset-" + app.getDate().substring(0,8).replace('/', '-') + ".csv");
             List<User> users = app.getDbHelper().getUsers();
             for (User user : users) {
                 int balance = user.getBalance();

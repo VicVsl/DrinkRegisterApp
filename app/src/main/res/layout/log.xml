@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/logText"
-        android:layout_width="800dp"
+        android:layout_width="900dp"
         android:layout_height="600dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"

@@ -28,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String sqlUsers = "CREATE TABLE users (id INTEGER PRIMARY KEY, first_name TEXT, last_name TEXT, group_ TEXT, rank TEXT, balance INTEGER, pin_code INTEGER)";
         db.execSQL(sqlUsers);
-        String sqlLog = "CREATE TABLE log (id INTEGER PRIMARY KEY, user_1 TEXT, user_2 TEXT, action_ TEXT, amount INTEGER)";
+        String sqlLog = "CREATE TABLE log (id INTEGER PRIMARY KEY, user_1 TEXT, user_2 TEXT, action_ TEXT, amount INTEGER, date TEXT)";
         db.execSQL(sqlLog);
     }
 
@@ -42,13 +42,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String sqlUsers = "DELETE FROM users";
         db.execSQL(sqlUsers);
         String sqlLog = "DELETE FROM log";
+        sqlLog = "DROP TABLE log";
         db.execSQL(sqlLog);
+        String sqlog = "CREATE TABLE log (id INTEGER PRIMARY KEY, user_1 TEXT, user_2 TEXT, action_ TEXT, amount INTEGER, date TEXT)";
+        db.execSQL(sqlog);
         app.finish();
         app.startActivity(app.getIntent());
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void exportDB() {
+    public void exportDB(String fileName) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM users", null);
 
@@ -58,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (!exportDir.exists()) {
                 exportDir.mkdirs();
             }
-            File file = new File(exportDir, "backup.csv");
+            File file = new File(exportDir, fileName);
             file.createNewFile();
             csvWrite = new CSVWriter(new FileWriter(file));
         } catch (Exception e) {
@@ -117,6 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<String> getBalances() {
         List<String> balances = new ArrayList<>();
+        int total = 0;
 
         SQLiteDatabase db = getReadableDatabase();
         String sql = "SELECT * FROM users";
@@ -128,8 +132,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             int balance = cursor.getInt(5);
 
             balances.add('\n' + firstName + " " + lastName + " : " + balance);
+            total += balance;
         }
         cursor.close();
+        balances.add("\n " + app.getResources().getString(R.string.total) + " : " + total + '\n');
         Collections.sort(balances);
         return balances;
     }
@@ -205,6 +211,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("user_2", user2);
         values.put("action_", action);
         values.put("amount", amount);
+        values.put("date", app.getDate());
         db.insert("log", null, values);
     }
 
@@ -220,15 +227,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             switch (cursor.getString(3)) {
                 case "addition":
                     actionText = " " + app.getResources().getString(R.string.addition) + " ";
-                    logLine = '\n' + cursor.getString(1) + actionText + cursor.getString(2) + " : " + cursor.getInt(4);
+                    logLine = '\n' + cursor.getString(5).substring(0,5) + ": " + cursor.getString(1) + actionText + cursor.getString(2) + " : " + cursor.getInt(4);
                     break;
                 case "creation":
                     actionText = " " + app.getResources().getString(R.string.creation) + " ";
-                    logLine = '\n' + cursor.getString(1) + actionText + cursor.getString(2);
+                    logLine = '\n' + cursor.getString(5).substring(0,5) + ": " + cursor.getString(1) + actionText + cursor.getString(2);
                     break;
                 case "deletion":
                     actionText = " " + app.getResources().getString(R.string.deletion) + " ";
-                    logLine = '\n' + cursor.getString(1) + actionText + cursor.getString(2) + " : " + cursor.getInt(4);
+                    logLine = '\n' + cursor.getString(5).substring(0,5) + ": " + cursor.getString(1) + actionText + cursor.getString(2) + " : " + cursor.getInt(4);
                     break;
                 default:
                     logLine = app.getResources().getString(R.string.error);
@@ -249,15 +256,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<String> log = new ArrayList<>();
         while (cursor.moveToNext()) {
             String logLine;
-            String actionText;
             switch (cursor.getString(3)) {
                 case "addition":
-                    actionText = " " + app.getResources().getString(R.string.addition) + " ";
-                    logLine = '\n' + cursor.getString(1) + actionText + cursor.getString(2) + " : " + cursor.getInt(4);
+                    logLine = '\n' + cursor.getString(5).substring(0,14) + "  " + cursor.getString(1) + " : " + cursor.getInt(4);
                     break;
                 case "deletion":
-                    actionText = " " + app.getResources().getString(R.string.deletion) + " ";
-                    logLine = '\n' + cursor.getString(1) + actionText + cursor.getString(2) + " : " + cursor.getInt(4);
+                    logLine = '\n' + cursor.getString(5).substring(0,14) + "  " + cursor.getString(1) + " : -" + cursor.getInt(4);
                     break;
                 default:
                     logLine = app.getResources().getString(R.string.error);

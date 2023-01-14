@@ -11,6 +11,7 @@
 
     <!-- confirm_changes -->
     <string name="changes_title">Changes</string>
+    <string name="cancel">Cancel</string>
 
     <!-- create_user -->
     <string name="create_user_header">New user</string>
@@ -72,7 +73,8 @@
     <string name="edit_user">Edit User</string>
     <!-- admin_options -->
     <string name="admin_options_header">Admin options</string>
-    <string name="get_balances">Reset balances</string>
+    <string name="get_balances">Get balances</string>
+    <string name="total">Total</string>
     <string name="reset_balances">Reset balances</string>
     <string name="print_database">Print Database</string>
     <string name="empty_database">Empty Database</string>
