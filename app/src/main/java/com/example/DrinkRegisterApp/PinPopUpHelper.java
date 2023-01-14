@@ -155,8 +155,9 @@ public class PinPopUpHelper {
             return;
         }
         int pincode = Integer.parseInt(pinCode);
-        app.getDbHelper().updatePincode(app.getLogin().getId(), pincode);
+        app.getDbHelper().updatePincode(login.getId(), pincode);
         update = false;
+        app.setEditMode(true);
         app.leftButtonHandler(null);
     }
 

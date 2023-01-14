@@ -349,6 +349,10 @@ public class MainActivity extends AppCompatActivity {
         return editMode;
     }
 
+    public void setEditMode(boolean editMode) {
+        this.editMode = editMode;
+    }
+
     public List<User> getUsers() {
         return users;
     }
